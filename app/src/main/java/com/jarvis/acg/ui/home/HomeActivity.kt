@@ -11,5 +11,5 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), HomeNav
 
     override fun getLayoutId(): Int { return R.layout.activity_home }
 
-    override fun getViewModel(): Class<HomeViewModel> { return HomeViewModel::class.java }
+    override fun getViewModelClass(): Class<HomeViewModel> { return HomeViewModel::class.java }
 }

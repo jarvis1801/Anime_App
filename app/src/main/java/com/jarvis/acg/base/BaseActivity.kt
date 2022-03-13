@@ -1,7 +1,5 @@
 package com.jarvis.acg.base
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +16,12 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCo
     abstract fun getBindingVariable(): Int
     @LayoutRes abstract fun getLayoutId(): Int
 
-    protected abstract fun getViewModel(): Class<VM>
+    protected abstract fun getViewModelClass(): Class<VM>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewModel = ViewModelProvider(this)[getViewModel()]
+        mViewModel = ViewModelProvider(this)[getViewModelClass()]
 
         performDataBinding()
     }
@@ -38,13 +36,8 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCo
         return mViewDataBinding!!
     }
 
-    inline fun <reified T : Any> Context.launchActivity(options: Bundle? = null, noinline init: Intent.() -> Unit = {}) {
-        val intent = Intent(this, T::class.java)
-        intent.init()
-        startActivity(intent, options)
-    }
 
-    fun openDialog(dialog: DialogFragment, tag: String) {
+    fun showDialog(dialog: DialogFragment, tag: String) {
         if (supportFragmentManager.findFragmentByTag(tag) == null) {
             dialog.show(supportFragmentManager, tag)
         }
