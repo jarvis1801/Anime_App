@@ -1,7 +1,6 @@
 package com.jarvis.acg.ui.splash
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import com.jarvis.acg.BR
 import com.jarvis.acg.Extension.Companion.launchActivity
 import com.jarvis.acg.R
@@ -19,10 +18,16 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(), S
     override fun getViewModelClass(): Class<SplashViewModel> { return SplashViewModel::class.java }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        mViewModel = ViewModelProvider(this)[SplashViewModel::class.java]
         super.onCreate(savedInstanceState)
+    }
 
+    override fun initView() {
         mViewModel?.setNavigator(this)
+    }
+
+    override fun initListener() {}
+
+    override fun initStartEvent() {
         mViewModel?.fetchConfig()
     }
 

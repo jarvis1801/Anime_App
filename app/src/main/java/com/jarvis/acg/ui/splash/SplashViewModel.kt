@@ -6,6 +6,7 @@ class SplashViewModel : BaseViewModel<SplashNavigator>() {
 
     fun fetchConfig() {
         // TODO api
+        getNavigator()?.openHomeActivity()
     }
 
 }

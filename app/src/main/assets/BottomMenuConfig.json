@@ -1,0 +1,18 @@
+[
+    {
+        "id": "anime",
+        "isShow": "true"
+    },
+    {
+        "id": "manga",
+        "isShow": "true"
+    },
+    {
+        "id": "novel",
+        "isShow": "true"
+    },
+    {
+        "id": "setting",
+        "isShow": "true"
+    }
+]

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_bar_anime"
+        android:titleCondensed="anime"
+        android:enabled="true"
+        android:visible="true"
+        android:icon="@drawable/ic_baseline_slow_motion_video_48"
+        android:title="@string/anime"
+        />
+
+    <item
+        android:id="@+id/navigation_bar_manga"
+        android:titleCondensed="manga"
+        android:enabled="true"
+        android:visible="true"
+        android:icon="@drawable/icon_manga"
+        android:title="@string/manga"
+        />
+
+    <item
+        android:id="@+id/navigation_bar_novel"
+        android:titleCondensed="novel"
+        android:enabled="true"
+        android:visible="true"
+        android:icon="@drawable/ic_baseline_menu_book_48"
+        android:title="@string/novel"
+        />
+
+    <item
+        android:id="@+id/navigation_bar_setting"
+        android:titleCondensed="setting"
+        android:enabled="true"
+        android:visible="true"
+        android:icon="@drawable/ic_baseline_settings_48"
+        android:title="@string/setting"
+        />
+</menu>

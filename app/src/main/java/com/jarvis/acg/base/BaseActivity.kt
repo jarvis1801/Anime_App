@@ -18,12 +18,19 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCo
 
     protected abstract fun getViewModelClass(): Class<VM>
 
+    abstract fun initView()
+    abstract fun initListener()
+    abstract fun initStartEvent()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mViewModel = ViewModelProvider(this)[getViewModelClass()]
 
         performDataBinding()
+        initView()
+        initListener()
+        initStartEvent()
     }
 
     private fun performDataBinding() {
