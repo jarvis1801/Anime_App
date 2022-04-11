@@ -1,9 +1,10 @@
-package com.jarvis.acg.ui.home
+package com.jarvis.acg.viewModel.home
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jarvis.acg.base.BaseViewModel
+import com.jarvis.acg.ui.home.HomeNavigator
 import com.jarvis.acg.util.home.BottomMenuUtil
 
 class HomeViewModel : BaseViewModel<HomeNavigator>() {

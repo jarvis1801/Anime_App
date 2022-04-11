@@ -9,6 +9,7 @@ import com.jarvis.acg.base.BaseActivity
 import com.jarvis.acg.config.home.BottomMenuConfig
 import com.jarvis.acg.databinding.ActivityHomeBinding
 import com.jarvis.acg.ui.home.adapter.HomeSectionAdapter
+import com.jarvis.acg.viewModel.home.HomeViewModel
 
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), HomeNavigator {
 
@@ -29,7 +30,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), HomeNav
         val deleteMenuIdList = arrayListOf<Int>()
         getDataBinding().bottomNavigation.apply {
             menu.forEach { menuItem ->
-                menuConfig.find { it.id == menuItem.titleCondensed && it.isShow }?.let {
+                menuConfig.find { (it.id == menuItem.titleCondensed && it.isShow) || it.id == BottomMenuConfig.ID_SETTING }?.let {
                     visibleMenuItemIdList.add(menuItem.itemId)
                 } ?: let { deleteMenuIdList.add(menuItem.itemId) }
             }

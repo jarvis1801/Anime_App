@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jarvis.acg.ui.home.HomeViewModel" />
+            type="com.jarvis.acg.viewModel.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
