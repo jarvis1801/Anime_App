@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.splash.SplashActivity">
+    tools:context=".ui.home.section.AnimeSectionFragment">
 
     <data>
         <variable
-            name="viewModel"
-            type="com.jarvis.acg.ui.splash.SplashViewModel" />
+            name="activityViewModel"
+            type="com.jarvis.acg.viewModel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,5 +14,4 @@
         android:layout_height="match_parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

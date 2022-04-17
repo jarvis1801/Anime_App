@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_page_book_item_padding">8dp</dimen>
+
+    <dimen name="padding_margin_6dp">6dp</dimen>
+</resources>

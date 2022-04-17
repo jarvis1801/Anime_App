@@ -3,21 +3,19 @@ package com.jarvis.acg.ui.home
 import android.view.View
 import androidx.core.view.forEach
 import androidx.viewpager2.widget.ViewPager2
-import com.jarvis.acg.BR
 import com.jarvis.acg.R
-import com.jarvis.acg.base.BaseActivity
+import com.jarvis.acg.base.BaseFragment
 import com.jarvis.acg.config.home.BottomMenuConfig
-import com.jarvis.acg.databinding.ActivityHomeBinding
+import com.jarvis.acg.databinding.FragmentHomeBinding
 import com.jarvis.acg.ui.home.adapter.HomeSectionAdapter
+import com.jarvis.acg.viewModel.MainViewModel
 import com.jarvis.acg.viewModel.home.HomeViewModel
 
-class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), HomeNavigator {
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel, MainViewModel>() {
 
-    override fun getBindingVariable(): Int { return BR.viewModel }
-
-    override fun getLayoutId(): Int { return R.layout.activity_home }
-
-    override fun getViewModelClass(): Class<HomeViewModel> { return HomeViewModel::class.java }
+    override fun getLayoutId(): Int = R.layout.fragment_home
+    override fun getViewModelClass(): Class<HomeViewModel> = HomeViewModel::class.java
+    override fun getActivityViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
 
     override fun initView() {
         setupBottomBar()
@@ -44,7 +42,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), HomeNav
     }
 
     private fun setupViewPager() {
-        val adapter = HomeSectionAdapter(supportFragmentManager, lifecycle)
+        val adapter = HomeSectionAdapter(childFragmentManager, lifecycle)
         mViewModel?.getVisibleFragmentList()?.let { adapter.fragmentList = it }
         getDataBinding().viewpager.apply {
             setAdapter(adapter)
@@ -69,6 +67,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), HomeNav
     }
 
     override fun initStartEvent() {
-
+        
     }
+
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ChipMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:checkable">true</item>
+        <item name="chipIconVisible">false</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="closeIconVisible">false</item>
+        <item name="chipMinHeight">32dp</item>
+        <item name="chipStartPadding">8dp</item>
+        <item name="iconStartPadding">0dp</item>
+        <item name="iconEndPadding">-2dp</item>
+        <item name="textStartPadding">8dp</item>
+        <item name="textEndPadding">6dp</item>
+        <item name="closeIconStartPadding">-2dp</item>
+        <item name="closeIconEndPadding">0dp</item>
+        <item name="chipEndPadding">10dp</item>
+    </style>
+
+    <style name="ChipMedium.NotSelectable" parent="ChipMedium">
+        <item name="android:checkable">false</item>
+    </style></resources>

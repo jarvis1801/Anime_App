@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.home.section.AnimeSectionFragment">
+
+    <data>
+        <import type="com.jarvis.acg.model.Translation" />
+
+        <variable
+            name="chapter"
+            type="com.jarvis.acg.model.Chapter" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="8dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipChapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{chapter.getNameForLocale}"
+            tools:text="Dummy"
+            style="@style/ChipMedium.NotSelectable" />
+
+    </LinearLayout>
+</layout>

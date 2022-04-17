@@ -1,4 +1,25 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        work_version = "2.7.1"
+        room_version = '2.4.2'
+        navigation_version = "2.4.2"
+        lifecycle_verison = "2.4.1"
+        gson_version = "2.9.0"
+        okhttp_version = "4.9.3"
+        retrofit_version = "2.9.0"
+    }
+
+    repositories {
+        google()
+    }
+
+    dependencies {
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version")
+    }
+}
+
 plugins {
     id 'com.android.application' version '7.1.2' apply false
     id 'com.android.library' version '7.1.2' apply false

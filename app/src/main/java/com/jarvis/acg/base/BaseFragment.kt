@@ -9,20 +9,26 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import com.jarvis.acg.BR
+import com.jarvis.acg.ui.home.MainActivity
+import com.jarvis.acg.viewModel.ViewModelFactory
 
-abstract class BaseFragment<DB : ViewDataBinding, VM: BaseViewModel<*>, AVM: BaseViewModel<*>> : Fragment() {
+abstract class BaseFragment<DB : ViewDataBinding, VM: BaseViewModel, AVM: BaseViewModel> : Fragment() {
     private lateinit var mViewDataBinding: DB
     var mViewModel: VM? = null
     var mActivityViewModel: AVM? = null
 
-    abstract fun getBindingVariable(): Int
     @LayoutRes abstract fun getLayoutId(): Int
 
     abstract fun getViewModelClass(): Class<VM>?
     abstract fun getActivityViewModelClass(): Class<AVM>?
 
+    open fun getArgs(): Bundle { return Bundle() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        getViewModelClass().takeIf { it != null }?.let { clazz -> mViewModel = ViewModelProvider(requireActivity())[clazz] }
+        val viewModelFactory = ViewModelFactory(this, getArgs())
+        getViewModelClass().takeIf { it != null }?.let { clazz -> mViewModel = ViewModelProvider(this, viewModelFactory)[clazz] }
         getActivityViewModelClass().takeIf { it != null }?.let { clazz -> mActivityViewModel = ViewModelProvider(requireActivity())[clazz] }
         mViewDataBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         return mViewDataBinding.root
@@ -31,11 +37,19 @@ abstract class BaseFragment<DB : ViewDataBinding, VM: BaseViewModel<*>, AVM: Bas
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         performDataBinding()
+        initView()
+        initListener()
+        initStartEvent()
     }
 
+    abstract fun initView()
+    abstract fun initListener()
+    abstract fun initStartEvent()
+
     private fun performDataBinding() {
-        mViewDataBinding.setVariable(getBindingVariable(), mViewModel)
-        mViewDataBinding.lifecycleOwner = this
+        mViewDataBinding.setVariable(BR.viewModel, mViewModel)
+        mViewDataBinding.setVariable(BR.activityViewModel, mActivityViewModel)
+        mViewDataBinding.lifecycleOwner = viewLifecycleOwner
         mViewDataBinding.executePendingBindings()
     }
 

@@ -1,9 +1,10 @@
 package com.jarvis.acg.config.home
 
 import com.google.gson.Gson
-import com.jarvis.acg.Extension.Companion.fromJson
+import com.jarvis.acg.extension.Extension.Companion.fromJson
 import com.jarvis.acg.base.BaseConfig
 import com.jarvis.acg.base.BaseFragment
+import com.jarvis.acg.extension.Extension.Companion.toArrayList
 import com.jarvis.acg.ui.home.section.AnimeSectionFragment
 import com.jarvis.acg.ui.home.section.MangaSectionFragment
 import com.jarvis.acg.ui.home.section.NovelSectionFragment
@@ -25,7 +26,7 @@ class BottomMenuConfig : BaseConfig<List<BottomMenu>>() {
 
     fun getShowFragmentList() : ArrayList<BaseFragment<*, *, *>> {
         val fragmentList = arrayListOf<BaseFragment<*, *, *>>()
-        getConfig().filter { it.isShow }.toCollection(ArrayList()).forEach { menu ->
+        getConfig().filter { it.isShow }.toArrayList().forEach { menu ->
             val fragment = when (menu.id.lowercase()) {
                 ID_ANIME -> AnimeSectionFragment()
                 ID_MANGA -> MangaSectionFragment()

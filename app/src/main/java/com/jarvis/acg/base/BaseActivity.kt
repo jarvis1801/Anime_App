@@ -6,14 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.jarvis.acg.BR
+import com.jarvis.acg.viewModel.ViewModelFactory
 
 
-abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCompatActivity() {
+abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
     private var mViewDataBinding: DB? = null
     var mViewModel: VM? = null
 
-    abstract fun getBindingVariable(): Int
     @LayoutRes abstract fun getLayoutId(): Int
 
     protected abstract fun getViewModelClass(): Class<VM>
@@ -25,7 +27,8 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewModel = ViewModelProvider(this)[getViewModelClass()]
+        val viewModelFactory = ViewModelFactory(this, intent.extras)
+        mViewModel = ViewModelProvider(this, viewModelFactory)[getViewModelClass()]
 
         performDataBinding()
         initView()
@@ -35,7 +38,7 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCo
 
     private fun performDataBinding() {
         mViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
-        mViewDataBinding?.setVariable(getBindingVariable(), mViewModel)
+        mViewDataBinding?.setVariable(BR.viewModel, mViewModel)
         mViewDataBinding?.executePendingBindings()
     }
 
@@ -48,5 +51,9 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCo
         if (supportFragmentManager.findFragmentByTag(tag) == null) {
             dialog.show(supportFragmentManager, tag)
         }
+    }
+
+    fun getFragmentStack(): Int {
+        return supportFragmentManager.backStackEntryCount
     }
 }

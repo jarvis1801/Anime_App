@@ -4,10 +4,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jarvis.acg.base.BaseViewModel
-import com.jarvis.acg.ui.home.HomeNavigator
+import com.jarvis.acg.model.Work
 import com.jarvis.acg.util.home.BottomMenuUtil
 
-class HomeViewModel : BaseViewModel<HomeNavigator>() {
+class HomeViewModel: BaseViewModel() {
+
+    private var _novelWorkList = MutableLiveData<ArrayList<Work>>()
+    var novelWorkList = _novelWorkList as LiveData<ArrayList<Work>>
 
     private val visibleMenuItemIdList = MutableLiveData<ArrayList<Int>>()
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="item" type="com.jarvis.acg.model.Work" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/main_page_book_item_padding">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_img"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="9:13"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.jarvis.acg.ui.customView.CustomImageView
+                android:id="@+id/img_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                tools:src="@drawable/dummy_covel" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <com.jarvis.acg.ui.customView.CustomTextView
+            android:id="@+id/txt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{item.getNameForLocale}"
+            android:paddingVertical="@dimen/padding_margin_6dp"
+            app:layout_constraintTop_toBottomOf="@id/cardview_img"
+            tools:text="魔法禁書目錄" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

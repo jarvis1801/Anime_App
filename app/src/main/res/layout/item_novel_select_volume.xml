@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.home.section.AnimeSectionFragment">
+
+    <data>
+
+        <import type="com.jarvis.acg.model.Translation" />
+
+        <variable
+            name="volume"
+            type="com.jarvis.acg.model.Volume" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.jarvis.acg.ui.customView.CustomTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="16dp"
+            android:text="@{volume.getNameForLocale()}"
+            android:textSize="20dp"
+            tools:text="第一章" />
+
+    </LinearLayout>
+</layout>
