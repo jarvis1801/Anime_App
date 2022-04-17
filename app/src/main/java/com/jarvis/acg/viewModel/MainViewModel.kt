@@ -1,16 +1,14 @@
 package com.jarvis.acg.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jarvis.acg.base.BaseViewModel
 import com.jarvis.acg.extension.Extension.Companion.join
-import com.jarvis.acg.extension.Extension.Companion.toArrayList
-import com.jarvis.acg.model.Chapter
 import com.jarvis.acg.model.Novel
 import com.jarvis.acg.model.Volume
 import com.jarvis.acg.model.Work
+import com.jarvis.acg.repository.Status
 import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.chapter.ChapterRepository
 import com.jarvis.acg.repository.library.LibraryRepository
@@ -19,7 +17,6 @@ import com.jarvis.acg.repository.painter.PainterRepository
 import com.jarvis.acg.repository.publishingHouse.PublishingHouseRepository
 import com.jarvis.acg.repository.volume.VolumeRepository
 import com.jarvis.acg.repository.work.WorkRepository
-import com.jarvis.acg.util.DateTimeUtil
 import com.jarvis.acg.util.DateTimeUtil.FORMAT_SERVER_TIME
 import com.jarvis.acg.util.DateTimeUtil.convertDateToTimestamp
 import kotlinx.coroutines.Dispatchers.IO
@@ -89,7 +86,9 @@ class MainViewModel(
             launch {
                 novel.volume_id_list?.let { volumeRepository.getVolumeListByIdList(it) }?.takeIf { it.data != null }?.let { response ->
                     response.data?.let { data ->
-                        data.forEach { volume -> volume.chapter_id_list?.let { chapterRepository.getChapterListByIdList(it) } }
+                        if (response.status == Status.SUCCESS) {
+                            data.forEach { volume -> volume.chapter_id_list?.let { chapterRepository.getChapterListByIdList(it) } }
+                        }
                     }
                 }
             }

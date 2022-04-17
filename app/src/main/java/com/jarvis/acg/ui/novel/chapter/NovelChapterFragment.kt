@@ -10,6 +10,8 @@ import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
 
 class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChapterViewModel, MainViewModel>() {
 
+    override var isFullScreen: Boolean = true
+
     override fun getArgs(): Bundle {
         val args: NovelChapterFragmentArgs by navArgs()
         return args.toBundle()
@@ -22,7 +24,6 @@ class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChap
     override fun getActivityViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
 
     override fun initView() {
-
     }
 
     override fun initListener() {
@@ -34,9 +35,5 @@ class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChap
     }
 
     private fun observeViewModel() {
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }

@@ -9,15 +9,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import com.jarvis.acg.BR
-import com.jarvis.acg.ui.home.MainActivity
+import com.jarvis.acg.extension.ViewExtension.Companion.hideStatusBar
+import com.jarvis.acg.extension.ViewExtension.Companion.showStatusBar
 import com.jarvis.acg.viewModel.ViewModelFactory
 
 abstract class BaseFragment<DB : ViewDataBinding, VM: BaseViewModel, AVM: BaseViewModel> : Fragment() {
     private lateinit var mViewDataBinding: DB
     var mViewModel: VM? = null
     var mActivityViewModel: AVM? = null
+
+    open var isFullScreen = false
 
     @LayoutRes abstract fun getLayoutId(): Int
 
@@ -27,6 +29,7 @@ abstract class BaseFragment<DB : ViewDataBinding, VM: BaseViewModel, AVM: BaseVi
     open fun getArgs(): Bundle { return Bundle() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        if (isFullScreen) hideStatusBar()
         val viewModelFactory = ViewModelFactory(this, getArgs())
         getViewModelClass().takeIf { it != null }?.let { clazz -> mViewModel = ViewModelProvider(this, viewModelFactory)[clazz] }
         getActivityViewModelClass().takeIf { it != null }?.let { clazz -> mActivityViewModel = ViewModelProvider(requireActivity())[clazz] }
@@ -55,5 +58,10 @@ abstract class BaseFragment<DB : ViewDataBinding, VM: BaseViewModel, AVM: BaseVi
 
     fun getDataBinding(): DB {
         return mViewDataBinding
+    }
+
+    override fun onDestroy() {
+        if (isFullScreen) showStatusBar()
+        super.onDestroy()
     }
 }
