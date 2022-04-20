@@ -1,4 +1,4 @@
-package com.jarvis.acg.ui.novel.select
+package com.jarvis.acg.ui.book
 
 import android.content.Context
 import android.util.Log
@@ -9,23 +9,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jarvis.acg.BR
 import com.jarvis.acg.base.BaseRevampRecyclerViewAdapter
 import com.jarvis.acg.base.BaseRevampViewHolder
-import com.jarvis.acg.databinding.ItemNovelSelectChapterBinding
-import com.jarvis.acg.databinding.ItemNovelSelectVolumeBinding
+import com.jarvis.acg.databinding.ItemBookSelectChapterBinding
+import com.jarvis.acg.databinding.ItemBookSelectVolumeBinding
 import com.jarvis.acg.extension.ViewExtension.Companion.addClick
 import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.Volume
 
-class NovelVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: Chapter) -> Unit) : BaseRevampRecyclerViewAdapter(context) {
+class BookVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: Chapter) -> Unit) : BaseRevampRecyclerViewAdapter(context) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_VOLUME -> {
-                val mViewDataBinding = ItemNovelSelectVolumeBinding.inflate(
+                val mViewDataBinding = ItemBookSelectVolumeBinding.inflate(
                     LayoutInflater.from(context), parent, false)
                 VolumeViewHolder(mViewDataBinding)
             }
             TYPE_CHAPTER -> {
-                val mViewDataBinding = ItemNovelSelectChapterBinding.inflate(
+                val mViewDataBinding = ItemBookSelectChapterBinding.inflate(
                     LayoutInflater.from(context), parent, false)
                 ChapterViewHolder(mViewDataBinding)
             }
@@ -52,7 +52,7 @@ class NovelVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: 
         override fun onBind(position: Int, item: Chapter) {
             binding.setVariable(BR.chapter, item)
             binding.executePendingBindings()
-            if (binding is ItemNovelSelectChapterBinding) {
+            if (binding is ItemBookSelectChapterBinding) {
                 binding.chipChapter.apply {
                     addClick({
                         onChapterClick(item)

@@ -54,7 +54,7 @@ class MainViewModel(
     private fun fetchNovelList() {
         viewModelScope.launch(IO) {
             requestApi()
-            val resource = novelRepository.getNovelList()
+            val resource = novelRepository.getBookList()
             val novelWorkList = resource.data.takeIf { it != null && it.size > 0 }?.let { fetchBookDetail(it) }
             novelWorkList.takeIf { it != null }?.let { _novelWorkList.postValue(novelWorkList!!) }
 

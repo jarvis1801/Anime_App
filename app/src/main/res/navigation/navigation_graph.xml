@@ -42,7 +42,7 @@
         android:id="@+id/novelSelectChapterFragment"
         android:name="com.jarvis.acg.ui.novel.select.NovelSelectChapterFragment"
         android:label="NovelSelectChapterFragment"
-        tools:layout="@layout/fragment_novel_select_chapter" >
+        tools:layout="@layout/fragment_book_select_chapter" >
 
         <argument
             android:name="novelId"
