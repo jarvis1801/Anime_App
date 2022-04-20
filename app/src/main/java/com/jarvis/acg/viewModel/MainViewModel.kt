@@ -39,6 +39,9 @@ class MainViewModel(
     private var _novelVolumeChapterList: MutableLiveData<ArrayList<Any>?> = MutableLiveData()
     var novelVolumeChapterList = _novelVolumeChapterList as LiveData<ArrayList<Any>?>
 
+    private var _mangaWorkList = MutableLiveData<ArrayList<Work>>()
+    var mangaWorkList = _mangaWorkList as LiveData<ArrayList<Work>>
+
     init {
         fetchNovelList()
         fetchMangaList()

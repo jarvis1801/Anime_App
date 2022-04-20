@@ -11,7 +11,7 @@ import com.jarvis.acg.extension.ViewExtension.Companion.addClick
 import com.jarvis.acg.model.Work
 import com.jarvis.acg.util.NavigationUtil.gotoNovelSelectChapterFragment
 
-class NovelAdapter(context: Context) : BaseSingleRecyclerViewAdapter<ItemNovelSectionBinding, NovelAdapter.ViewHolder, Work>(context) {
+class BookSectionAdapter(context: Context) : BaseSingleRecyclerViewAdapter<ItemNovelSectionBinding, BookSectionAdapter.ViewHolder, Work>(context) {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> ItemNovelSectionBinding
         get() = ItemNovelSectionBinding::inflate
 
