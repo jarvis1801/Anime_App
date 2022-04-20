@@ -1,10 +1,8 @@
 package com.jarvis.acg.repository.localDataSource.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.jarvis.acg.model.Chapter
+import androidx.room.*
+import com.jarvis.acg.model.chapter.Chapter
+import com.jarvis.acg.model.chapter.ChapterUpdate
 
 @Dao
 interface ChapterDao {
@@ -23,4 +21,7 @@ interface ChapterDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(obj: Chapter)
+
+    @Update(entity = Chapter::class)
+    fun update(obj: ChapterUpdate): Int
 }

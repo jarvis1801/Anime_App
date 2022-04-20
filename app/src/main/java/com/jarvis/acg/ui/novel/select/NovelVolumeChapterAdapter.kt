@@ -1,6 +1,7 @@
 package com.jarvis.acg.ui.novel.select
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
@@ -11,7 +12,7 @@ import com.jarvis.acg.base.BaseRevampViewHolder
 import com.jarvis.acg.databinding.ItemNovelSelectChapterBinding
 import com.jarvis.acg.databinding.ItemNovelSelectVolumeBinding
 import com.jarvis.acg.extension.ViewExtension.Companion.addClick
-import com.jarvis.acg.model.Chapter
+import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.Volume
 
 class NovelVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: Chapter) -> Unit) : BaseRevampRecyclerViewAdapter(context) {
@@ -56,6 +57,7 @@ class NovelVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: 
                     addClick({
                         onChapterClick(item)
                     })
+                    isSelected = item.isRead == true
                 }
             }
         }

@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.jarvis.acg.extension.Extension.Companion.fromJson
 import com.jarvis.acg.model.*
+import com.jarvis.acg.model.chapter.Chapter
 
 class GenericDataConverter {
     @TypeConverter

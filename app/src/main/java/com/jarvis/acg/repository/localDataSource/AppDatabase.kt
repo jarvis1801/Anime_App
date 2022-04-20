@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.jarvis.acg.model.*
+import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.repository.localDataSource.dao.*
 
 @Database(entities = [Novel::class, Work::class, Painter::class, Library::class, PublishingHouse::class,

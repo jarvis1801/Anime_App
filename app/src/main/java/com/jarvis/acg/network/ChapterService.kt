@@ -1,6 +1,6 @@
 package com.jarvis.acg.network
 
-import com.jarvis.acg.model.Chapter
+import com.jarvis.acg.model.chapter.Chapter
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

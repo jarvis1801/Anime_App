@@ -3,12 +3,13 @@ package com.jarvis.acg.extension
 import android.app.Activity
 import android.os.SystemClock
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
 
 class ViewExtension {
     companion object {
-        fun View.addClick(action: () -> Unit, debounceTime: Long = 1000L) {
+        fun View.addClick(action: () -> Unit, debounceTime: Long = 500L) {
             this.setOnClickListener(object : View.OnClickListener {
                 private var lastClickTime: Long = 0
 
@@ -38,5 +39,16 @@ class ViewExtension {
         fun Fragment.hideStatusBar() { requireActivity().hideStatusBar() }
 
         fun Fragment.showStatusBar() { requireActivity().showStatusBar() }
+
+        fun View.addGlobalListenerAsOne(isHeightNon0: Boolean = true, onAction: () -> Unit = {}) {
+            viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    if (!isHeightNon0 || height > 0) {
+                        viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        onAction()
+                    }
+                }
+            })
+        }
     }
 }

@@ -8,7 +8,7 @@
 
         <variable
             name="chapter"
-            type="com.jarvis.acg.model.Chapter" />
+            type="com.jarvis.acg.model.chapter.Chapter" />
     </data>
 
     <LinearLayout

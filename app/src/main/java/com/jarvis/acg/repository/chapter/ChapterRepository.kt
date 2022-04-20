@@ -3,6 +3,7 @@ package com.jarvis.acg.repository.chapter
 import com.jarvis.acg.base.BaseRepository
 import com.jarvis.acg.extension.Extension.Companion.join
 import com.jarvis.acg.extension.Extension.Companion.toArrayList
+import com.jarvis.acg.model.chapter.ChapterUpdate
 import com.jarvis.acg.repository.localDataSource.dao.AuthorDao
 import com.jarvis.acg.repository.localDataSource.dao.ChapterDao
 
@@ -20,4 +21,6 @@ class ChapterRepository(
     fun getChapterListByIdListFromDB(idList: List<String>) = chapterDao.getByChapterListByIdList(idList)
 
     fun getChapterByIdFromDB(id: String) = chapterDao.getById(id)
+
+    fun updateChapter(chapter: ChapterUpdate) = chapterDao.update(chapter)
 }

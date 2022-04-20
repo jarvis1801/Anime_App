@@ -36,8 +36,8 @@ class MainViewModel(
     private var _novelWorkList = MutableLiveData<ArrayList<Work>>()
     var novelWorkList = _novelWorkList as LiveData<ArrayList<Work>>
 
-    private var _novelVolumeChapterList: MutableLiveData<ArrayList<Any>> = MutableLiveData()
-    var novelVolumeChapterList = _novelVolumeChapterList as LiveData<ArrayList<Any>>
+    private var _novelVolumeChapterList: MutableLiveData<ArrayList<Any>?> = MutableLiveData()
+    var novelVolumeChapterList = _novelVolumeChapterList as LiveData<ArrayList<Any>?>
 
     init {
         fetchNovelList()
@@ -120,7 +120,6 @@ class MainViewModel(
     }
 
     private fun convertNovelVolumeChapterList(data: List<Volume>): ArrayList<Any> {
-        // TODO SORTING
         val resultList = arrayListOf<Any>()
         val sortedVolumeList = data.sortedWith(compareBy(
             { it.order },
@@ -146,7 +145,11 @@ class MainViewModel(
         return resultList
     }
 
-    fun getNovelVolumeChapterList(): MutableLiveData<ArrayList<Any>> {
-        return _novelVolumeChapterList
+    fun getNovelVolumeChapterList(): ArrayList<Any>? {
+        return _novelVolumeChapterList.value
+    }
+
+    fun setNovelVolumeChapterList(value: ArrayList<Any>?) {
+        _novelVolumeChapterList.postValue(value)
     }
 }

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.jarvis.acg.R
-import com.jarvis.acg.model.Chapter
+import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.Work
 import com.jarvis.acg.ui.home.HomeFragmentDirections
 import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragmentDirections
