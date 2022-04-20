@@ -8,10 +8,12 @@ import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.repository.localDataSource.dao.*
 
 @Database(entities = [Novel::class, Work::class, Painter::class, Library::class, PublishingHouse::class,
-    Author::class, Chapter::class, Volume::class], version = 1)
+    Author::class, Chapter::class, Volume::class, Manga::class], version = 1)
 @TypeConverters(GenericDataConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun novelDao(): NovelDao
+    abstract fun mangaDao(): MangaDao
+
     abstract fun workDao(): WorkDao
     abstract fun painterDao(): PainterDao
     abstract fun libraryDao(): LibraryDao

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jarvis.acg.base.BaseViewModel
 import com.jarvis.acg.extension.Extension.Companion.join
+import com.jarvis.acg.model.Book
 import com.jarvis.acg.model.Novel
 import com.jarvis.acg.model.Volume
 import com.jarvis.acg.model.Work
@@ -12,6 +13,7 @@ import com.jarvis.acg.repository.Status
 import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.chapter.ChapterRepository
 import com.jarvis.acg.repository.library.LibraryRepository
+import com.jarvis.acg.repository.manga.MangaRepository
 import com.jarvis.acg.repository.novel.NovelRepository
 import com.jarvis.acg.repository.painter.PainterRepository
 import com.jarvis.acg.repository.publishingHouse.PublishingHouseRepository
@@ -25,6 +27,7 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(
     val novelRepository: NovelRepository,
+    val mangaRepository: MangaRepository,
     val workRepository: WorkRepository,
     val painterRepository: PainterRepository,
     val libraryRepository: LibraryRepository,
@@ -52,42 +55,44 @@ class MainViewModel(
         viewModelScope.launch(IO) {
             requestApi()
             val resource = novelRepository.getNovelList()
-            val novelWorkList = resource.data.takeIf { it != null && it.size > 0 }?.let { fetchNovelDetail(it) }
+            val novelWorkList = resource.data.takeIf { it != null && it.size > 0 }?.let { fetchBookDetail(it) }
             novelWorkList.takeIf { it != null }?.let { _novelWorkList.postValue(novelWorkList!!) }
 
             requestApiFinished()
         }
     }
 
-    private suspend fun fetchNovelDetail(novelList: ArrayList<Novel>): ArrayList<Work> = withContext(IO) {
-        val novelWorkList = arrayListOf<Work>()
-        novelList.forEach { novel ->
-            launch { novel.work_id?.let {
+    private suspend fun <T : Book> fetchBookDetail(novelList: ArrayList<T>): ArrayList<Work> = withContext(IO) {
+        val workList = arrayListOf<Work>()
+        novelList.forEach { book ->
+            launch { book.work_id?.let {
                 val work = workRepository.getWorkById(it).data
                 work?.apply {
-                    novel_id = novel.id
-                    novelWorkList.add(work)
+                    book_id = book.id
+                    workList.add(work)
                 }
             } }
 
-            launch { novel.painter_id_list?.let {
+            launch { book.painter_id_list?.let {
                 painterRepository.getPainterListByIdList(it.join("_"))
             } }
 
-            launch { novel.library_id_list?.let {
-                libraryRepository.getLibraryListByIdList(it.join("_"))
-            } }
+            if (book is Novel) {
+                launch { book.library_id_list?.let {
+                    libraryRepository.getLibraryListByIdList(it.join("_"))
+                } }
+            }
 
-            launch { novel.publishing_house_id_list?.let {
+            launch { book.publishing_house_id_list?.let {
                 publishingHouseRepository.getPublishingHouseListByIdList(it.join("_"))
             } }
 
-            launch { novel.author_id_list?.let {
+            launch { book.author_id_list?.let {
                 authorRepository.getAuthorListByIdList(it)
             } }
 
             launch {
-                novel.volume_id_list?.let { volumeRepository.getVolumeListByIdList(it) }?.takeIf { it.data != null }?.let { response ->
+                book.volume_id_list?.let { volumeRepository.getVolumeListByIdList(it) }?.takeIf { it.data != null }?.let { response ->
                     response.data?.let { data ->
                         if (response.status == Status.SUCCESS) {
                             data.forEach { volume -> volume.chapter_id_list?.let { chapterRepository.getChapterListByIdList(it) } }
@@ -96,10 +101,18 @@ class MainViewModel(
                 }
             }
         }
-        novelWorkList
+        workList
     }
 
     private fun fetchMangaList() {
+        viewModelScope.launch(IO) {
+            requestApi()
+            val resource = mangaRepository.getMangaList()
+            val novelWorkList = resource.data.takeIf { it != null && it.size > 0 }?.let { fetchBookDetail(it) }
+            novelWorkList.takeIf { it != null }?.let { _mangaWorkList.postValue(novelWorkList!!) }
+
+            requestApiFinished()
+        }
     }
 
     private fun fetchAnimeList() {

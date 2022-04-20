@@ -12,8 +12,8 @@ import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragmentDirections
 
 object NavigationUtil {
 
-    fun View.gotoNovelSelectChapterFragment(item: Work) {
-        val novelId = item.novel_id
+    fun Fragment.gotoNovelSelectChapterFragment(item: Work) {
+        val novelId = item.book_id
         val action = HomeFragmentDirections.actionHomeFragmentToNovelSelectChapterFragment(novelId)
         this.findNavController().navigate(action)
     }

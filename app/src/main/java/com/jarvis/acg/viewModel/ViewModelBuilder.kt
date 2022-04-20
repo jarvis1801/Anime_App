@@ -8,6 +8,8 @@ import com.jarvis.acg.repository.chapter.ChapterRemoteDataSource
 import com.jarvis.acg.repository.chapter.ChapterRepository
 import com.jarvis.acg.repository.library.LibraryRemoteDataSource
 import com.jarvis.acg.repository.library.LibraryRepository
+import com.jarvis.acg.repository.manga.MangaRemoteDataSource
+import com.jarvis.acg.repository.manga.MangaRepository
 import com.jarvis.acg.repository.novel.NovelRepository
 import com.jarvis.acg.repository.novel.NovelRemoteDataSource
 import com.jarvis.acg.repository.painter.PainterRemoteDataSource
@@ -26,6 +28,7 @@ object ViewModelBuilder {
 
     fun buildMainViewModel() : MainViewModel {
         val novelRepository = NovelRepository(NovelRemoteDataSource(), App.database.novelDao())
+        val mangaRepository = MangaRepository(MangaRemoteDataSource(), App.database.mangaDao())
         val workRepository = WorkRepository(WorkRemoteDataSource(), App.database.workDao())
         val painterRepository = PainterRepository(PainterRemoteDataSource(), App.database.painterDao())
         val libraryRepository = LibraryRepository(LibraryRemoteDataSource(), App.database.libraryDao())
@@ -36,6 +39,7 @@ object ViewModelBuilder {
 
         return MainViewModel(
             novelRepository,
+            mangaRepository,
             workRepository,
             painterRepository,
             libraryRepository,

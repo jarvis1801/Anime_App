@@ -6,6 +6,7 @@ import com.jarvis.acg.base.BaseFragment
 import com.jarvis.acg.databinding.FragmentBookSectionBinding
 import com.jarvis.acg.model.Work
 import com.jarvis.acg.ui.home.section.adapter.BookSectionAdapter
+import com.jarvis.acg.util.NavigationUtil.gotoNovelSelectChapterFragment
 import com.jarvis.acg.viewModel.EmptyViewModel
 import com.jarvis.acg.viewModel.MainViewModel
 
@@ -19,7 +20,13 @@ abstract class BookSectionFragment : BaseFragment<FragmentBookSectionBinding, Em
     override fun getActivityViewModelClass(): Class<MainViewModel> { return MainViewModel::class.java }
 
     override fun initView() {
-        sectionAdapter = BookSectionAdapter(requireContext())
+        sectionAdapter = BookSectionAdapter(requireContext()) { work ->
+            if (this is NovelSectionFragment) {
+                gotoNovelSelectChapterFragment(work)
+            } else if (this is MangaSectionFragment) {
+
+            }
+        }
 
         getDataBinding().rvWork.apply {
             layoutManager = GridLayoutManager(requireContext(), 3)

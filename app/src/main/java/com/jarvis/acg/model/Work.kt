@@ -11,7 +11,7 @@ data class Work(
     var tag_id_list: ArrayList<String>? = null,
 
     // extra
-    @Ignore var novel_id: String? = null
+    @Ignore var book_id: String? = null
 ) : BaseNameObject() {
 
     fun goToNovelPage(view: View) {
