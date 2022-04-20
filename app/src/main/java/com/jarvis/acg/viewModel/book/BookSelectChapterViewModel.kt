@@ -32,7 +32,7 @@ abstract class BookSelectChapterViewModel<B : Book>(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val book = bookRepository.getBookByIdFromDB(savedStateHandle["novelId"])
+            val book = bookRepository.getBookByIdFromDB(savedStateHandle["bookId"])
             launch { book?.let { _book.postValue(it) } }
 
             val work = workRepository.getWorkByIdFromDB(book?.work_id)

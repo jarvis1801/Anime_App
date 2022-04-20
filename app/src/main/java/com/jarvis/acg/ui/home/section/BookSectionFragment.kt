@@ -6,6 +6,7 @@ import com.jarvis.acg.base.BaseFragment
 import com.jarvis.acg.databinding.FragmentBookSectionBinding
 import com.jarvis.acg.model.Work
 import com.jarvis.acg.ui.home.section.adapter.BookSectionAdapter
+import com.jarvis.acg.util.NavigationUtil.gotoMangaSelectChapterFragment
 import com.jarvis.acg.util.NavigationUtil.gotoNovelSelectChapterFragment
 import com.jarvis.acg.viewModel.EmptyViewModel
 import com.jarvis.acg.viewModel.MainViewModel
@@ -24,7 +25,7 @@ abstract class BookSectionFragment : BaseFragment<FragmentBookSectionBinding, Em
             if (this is NovelSectionFragment) {
                 gotoNovelSelectChapterFragment(work)
             } else if (this is MangaSectionFragment) {
-
+                gotoMangaSelectChapterFragment(work)
             }
         }
 

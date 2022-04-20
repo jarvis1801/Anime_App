@@ -21,6 +21,7 @@ import com.jarvis.acg.repository.volume.VolumeRepository
 import com.jarvis.acg.repository.work.WorkRemoteDataSource
 import com.jarvis.acg.repository.work.WorkRepository
 import com.jarvis.acg.viewModel.home.HomeViewModel
+import com.jarvis.acg.viewModel.manga.MangaSelectChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelSelectChapterViewModel
 
@@ -62,6 +63,19 @@ object ViewModelBuilder {
         return NovelSelectChapterViewModel(
             handle,
             novelRepository,
+            workRepository,
+            authorRepository
+        )
+    }
+
+    fun buildMangaSelectChapterViewModel(handle: SavedStateHandle) : MangaSelectChapterViewModel {
+        val mangaRepository = MangaRepository(MangaRemoteDataSource(), App.database.mangaDao())
+        val workRepository = WorkRepository(WorkRemoteDataSource(), App.database.workDao())
+        val authorRepository = AuthorRepository(AuthorRemoteDataSource(), App.database.authorDao())
+
+        return MangaSelectChapterViewModel(
+            handle,
+            mangaRepository,
             workRepository,
             authorRepository
         )

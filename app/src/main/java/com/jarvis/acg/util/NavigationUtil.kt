@@ -12,14 +12,20 @@ import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragmentDirections
 
 object NavigationUtil {
 
+    fun Fragment.gotoHomeFragment() {
+        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+    }
+
     fun Fragment.gotoNovelSelectChapterFragment(item: Work) {
         val novelId = item.book_id
         val action = HomeFragmentDirections.actionHomeFragmentToNovelSelectChapterFragment(novelId)
         this.findNavController().navigate(action)
     }
 
-    fun Fragment.gotoHomeFragment() {
-        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+    fun Fragment.gotoMangaSelectChapterFragment(item: Work) {
+        val mangaId = item.book_id
+        val action = HomeFragmentDirections.actionHomeFragmentToMangaSelectChapterFragment(mangaId)
+        this.findNavController().navigate(action)
     }
 
     fun Fragment.gotoNovelChapterFragment(chapter: Chapter) {

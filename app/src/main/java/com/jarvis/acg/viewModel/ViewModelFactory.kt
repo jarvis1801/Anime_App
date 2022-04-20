@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.jarvis.acg.ui.splash.SplashViewModel
 import com.jarvis.acg.viewModel.home.HomeViewModel
+import com.jarvis.acg.viewModel.manga.MangaSelectChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelSelectChapterViewModel
 
@@ -23,6 +24,7 @@ class ViewModelFactory(owner: SavedStateRegistryOwner, defaultArgs: Bundle? = Bu
                 isAssignableFrom(NovelSelectChapterViewModel::class.java) -> ViewModelBuilder.buildNovelSelectChapterViewModel(handle)
                 isAssignableFrom(NovelChapterViewModel::class.java) -> ViewModelBuilder.buildNovelChapterViewModel(handle)
 
+                isAssignableFrom(MangaSelectChapterViewModel::class.java) -> ViewModelBuilder.buildMangaSelectChapterViewModel(handle)
 
                 isAssignableFrom(EmptyViewModel::class.java) -> EmptyViewModel()
                 else ->
