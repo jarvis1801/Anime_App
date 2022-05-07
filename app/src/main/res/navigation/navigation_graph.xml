@@ -112,5 +112,31 @@
             app:argType="string"
             app:nullable="true" />
 
+        <action
+            android:id="@+id/action_mangaSelectChapterFragment_to_mangaChapterFragment"
+            app:destination="@id/mangaChapterFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+
+            <argument
+                android:name="chapterId"
+                app:argType="string"
+                app:nullable="true" />
+
+        </action>
+
+    </fragment>
+    <fragment
+        android:id="@+id/mangaChapterFragment"
+        android:name="com.jarvis.acg.ui.manga.chapter.MangaChapterFragment"
+        android:label="MangaChapterFragment">
+
+        <argument
+            android:name="chapterId"
+            app:argType="string"
+            app:nullable="true" />
+
     </fragment>
 </navigation>

@@ -23,12 +23,14 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel> : AppCompa
     abstract fun initView()
     abstract fun initListener()
     abstract fun initStartEvent()
+    open fun subscribeViewModel() {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val viewModelFactory = ViewModelFactory(this, intent.extras)
         mViewModel = ViewModelProvider(this, viewModelFactory)[getViewModelClass()]
+        subscribeViewModel()
 
         performDataBinding()
         initView()

@@ -22,6 +22,9 @@ interface ChapterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(obj: Chapter)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertIgnore(obj: Chapter)
+
     @Update(entity = Chapter::class)
     fun update(obj: ChapterUpdate): Int
 }

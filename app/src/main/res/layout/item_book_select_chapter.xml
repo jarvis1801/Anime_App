@@ -7,8 +7,8 @@
         <import type="com.jarvis.acg.model.Translation" />
 
         <variable
-            name="chapter"
-            type="com.jarvis.acg.model.chapter.Chapter" />
+            name="title"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:id="@+id/chipChapter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{chapter.getNameForLocale}"
+            android:text="@{title}"
             tools:text="Dummy"
             style="@style/ChipMedium.NotSelectable" />
 

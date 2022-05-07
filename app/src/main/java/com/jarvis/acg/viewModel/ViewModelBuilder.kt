@@ -6,10 +6,14 @@ import com.jarvis.acg.repository.author.AuthorRemoteDataSource
 import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.chapter.ChapterRemoteDataSource
 import com.jarvis.acg.repository.chapter.ChapterRepository
+import com.jarvis.acg.repository.image.ImageRemoteDataSource
+import com.jarvis.acg.repository.image.ImageRepository
 import com.jarvis.acg.repository.library.LibraryRemoteDataSource
 import com.jarvis.acg.repository.library.LibraryRepository
 import com.jarvis.acg.repository.manga.MangaRemoteDataSource
 import com.jarvis.acg.repository.manga.MangaRepository
+import com.jarvis.acg.repository.mangaChapter.MangaChapterRemoteDataSource
+import com.jarvis.acg.repository.mangaChapter.MangaChapterRepository
 import com.jarvis.acg.repository.novel.NovelRepository
 import com.jarvis.acg.repository.novel.NovelRemoteDataSource
 import com.jarvis.acg.repository.painter.PainterRemoteDataSource
@@ -21,9 +25,8 @@ import com.jarvis.acg.repository.volume.VolumeRepository
 import com.jarvis.acg.repository.work.WorkRemoteDataSource
 import com.jarvis.acg.repository.work.WorkRepository
 import com.jarvis.acg.viewModel.home.HomeViewModel
-import com.jarvis.acg.viewModel.manga.MangaSelectChapterViewModel
+import com.jarvis.acg.viewModel.manga.MangaChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
-import com.jarvis.acg.viewModel.novel.NovelSelectChapterViewModel
 
 object ViewModelBuilder {
 
@@ -37,6 +40,7 @@ object ViewModelBuilder {
         val authorRepository = AuthorRepository(AuthorRemoteDataSource(), App.database.authorDao())
         val volumeRepository = VolumeRepository(VolumeRemoteDataSource(), App.database.volumeDao())
         val chapterRepository = ChapterRepository(ChapterRemoteDataSource(), App.database.chapterDao())
+        val mangaChapterRepository = MangaChapterRepository(MangaChapterRemoteDataSource(), App.database.mangaChapterDao())
 
         return MainViewModel(
             novelRepository,
@@ -47,7 +51,8 @@ object ViewModelBuilder {
             publishingHouseRepository,
             authorRepository,
             volumeRepository,
-            chapterRepository
+            chapterRepository,
+            mangaChapterRepository
         )
     }
 
@@ -55,34 +60,43 @@ object ViewModelBuilder {
         return HomeViewModel()
     }
 
-    fun buildNovelSelectChapterViewModel(handle: SavedStateHandle) : NovelSelectChapterViewModel {
+    fun buildNovelSelectChapterViewModel(handle: SavedStateHandle) : NovelChapterViewModel {
         val novelRepository = NovelRepository(NovelRemoteDataSource(), App.database.novelDao())
         val workRepository = WorkRepository(WorkRemoteDataSource(), App.database.workDao())
         val authorRepository = AuthorRepository(AuthorRemoteDataSource(), App.database.authorDao())
+        val volumeRepository = VolumeRepository(VolumeRemoteDataSource(), App.database.volumeDao())
+        val chapterRepository = ChapterRepository(ChapterRemoteDataSource(), App.database.chapterDao())
+        val mangaChapterRepository = MangaChapterRepository(MangaChapterRemoteDataSource(), App.database.mangaChapterDao())
 
-        return NovelSelectChapterViewModel(
+        return NovelChapterViewModel(
             handle,
             novelRepository,
             workRepository,
-            authorRepository
+            authorRepository,
+            volumeRepository,
+            chapterRepository,
+            mangaChapterRepository
         )
     }
 
-    fun buildMangaSelectChapterViewModel(handle: SavedStateHandle) : MangaSelectChapterViewModel {
+    fun buildMangaSelectChapterViewModel(handle: SavedStateHandle) : MangaChapterViewModel {
         val mangaRepository = MangaRepository(MangaRemoteDataSource(), App.database.mangaDao())
         val workRepository = WorkRepository(WorkRemoteDataSource(), App.database.workDao())
         val authorRepository = AuthorRepository(AuthorRemoteDataSource(), App.database.authorDao())
+        val volumeRepository = VolumeRepository(VolumeRemoteDataSource(), App.database.volumeDao())
+        val chapterRepository = ChapterRepository(ChapterRemoteDataSource(), App.database.chapterDao())
+        val mangaChapterRepository = MangaChapterRepository(MangaChapterRemoteDataSource(), App.database.mangaChapterDao())
+        val imageRepository = ImageRepository(ImageRemoteDataSource(), App.database.imageDao())
 
-        return MangaSelectChapterViewModel(
+        return MangaChapterViewModel(
             handle,
             mangaRepository,
             workRepository,
-            authorRepository
+            authorRepository,
+            volumeRepository,
+            chapterRepository,
+            mangaChapterRepository,
+            imageRepository
         )
-    }
-
-    fun buildNovelChapterViewModel(handle: SavedStateHandle) : NovelChapterViewModel {
-        val chapterRepository = ChapterRepository(ChapterRemoteDataSource(), App.database.chapterDao())
-        return NovelChapterViewModel(handle, chapterRepository)
     }
 }

@@ -15,12 +15,45 @@ class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
 
     override fun getViewModelClass(): Class<MainViewModel> { return MainViewModel::class.java }
 
+    override fun subscribeViewModel() {
+        mViewModel?.requestLoading?.observe(this) {
+            Log.d("chris", "requestLoading $it")
+            if (it == true) {
+                showLoading()
+            }
+        }
+
+        mViewModel?.reduceLoading?.observe(this) {
+            Log.d("chris", "reduceLoading $it")
+            if (it == true) {
+                hideLoading()
+            }
+        }
+
+        mViewModel?.novelWorkList?.observe(this) {
+            mViewModel?.requestApiFinished()
+        }
+
+        mViewModel?.mangaWorkList?.observe(this) {
+            mViewModel?.requestApiFinished()
+        }
+    }
+
     override fun initView() {
     }
 
     override fun initListener() {}
 
     override fun initStartEvent() {
+        mViewModel?.fetchList()
+    }
+
+    fun showLoading() {
+        getDataBinding().loadingFrame.showLoading()
+    }
+
+    fun hideLoading() {
+        getDataBinding().loadingFrame.hideLoading()
     }
 
     override fun onBackPressed() {

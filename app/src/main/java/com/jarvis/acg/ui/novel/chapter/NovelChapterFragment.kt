@@ -17,6 +17,7 @@ import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
 class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChapterViewModel, MainViewModel>() {
 
     override var isFullScreen: Boolean = true
+    override var isChildViewModelShare: Boolean = true
 
     override fun getArgs(): Bundle {
         val args: NovelChapterFragmentArgs by navArgs()
@@ -40,19 +41,11 @@ class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChap
         }
 
         getDataBinding().imgPrevChapter.addClick({
-            getDataBinding().scrollView.scrollTo(0, 0)
-            getDataBinding().imgPrevChapter.visibility = View.INVISIBLE
-            mActivityViewModel?.getNovelVolumeChapterList().let {
-                mViewModel?.onPrevChapterClick(it)
-            }
+            mViewModel?.onPrevChapterClick { getDataBinding().scrollView.scrollTo(0, 0) }
         }, 0)
 
         getDataBinding().imgNextChapter.addClick({
-            getDataBinding().scrollView.scrollTo(0, 0)
-            getDataBinding().imgNextChapter.visibility = View.INVISIBLE
-            mActivityViewModel?.getNovelVolumeChapterList().let {
-                mViewModel?.onNextChapterClick(it)
-            }
+            mViewModel?.onNextChapterClick { getDataBinding().scrollView.scrollTo(0, 0) }
         }, 0)
     }
 
@@ -67,12 +60,8 @@ class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChap
 
     override fun initStartEvent() {
         observeViewModel()
-        getChapter()
-    }
-
-    private fun getChapter() {
-        mActivityViewModel?.getNovelVolumeChapterList().let {
-            mViewModel?.initCurrentChapter(it)
+        getArgs().getString("chapterId")?.let { id ->
+            mViewModel?.setCurrentChapterById(id)
         }
     }
 
@@ -80,8 +69,6 @@ class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChap
         mViewModel?.currentChapter?.observe(viewLifecycleOwner) { chapter ->
             chapter?.let {
                 mViewModel?.contentLineTopList?.clear()
-                getDataBinding().imgNextChapter.visibility = if (chapter.nextChapterId.isEmpty()) View.INVISIBLE else View.VISIBLE
-                getDataBinding().imgPrevChapter.visibility = if (chapter.prevChapterId.isEmpty()) View.INVISIBLE else View.VISIBLE
                 getDataBinding().tvContent.apply {
                     addGlobalListenerAsOne {
                         chapter.currentLine?.takeIf { it > 0 && it < layout.lineCount }?.let {

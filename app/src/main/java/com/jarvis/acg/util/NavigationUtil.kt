@@ -1,13 +1,13 @@
 package com.jarvis.acg.util
 
-import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.jarvis.acg.R
-import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.Work
+import com.jarvis.acg.model.chapter.Chapter
+import com.jarvis.acg.model.mangaChapter.MangaChapter
 import com.jarvis.acg.ui.home.HomeFragmentDirections
+import com.jarvis.acg.ui.manga.select.MangaSelectChapterFragmentDirections
 import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragmentDirections
 
 object NavigationUtil {
@@ -31,6 +31,12 @@ object NavigationUtil {
     fun Fragment.gotoNovelChapterFragment(chapter: Chapter) {
         val chapterId = chapter.id
         val action = NovelSelectChapterFragmentDirections.actionNovelSelectChapterFragmentToNovelChapterFragment(chapterId)
+        findNavController().navigate(action)
+    }
+
+    fun Fragment.gotoMangaChapterFragment(mangaChapter: MangaChapter) {
+        val chapterId = mangaChapter.id
+        val action = MangaSelectChapterFragmentDirections.actionMangaSelectChapterFragmentToMangaChapterFragment(chapterId)
         findNavController().navigate(action)
     }
 }

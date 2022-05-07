@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.jarvis.acg.ui.splash.SplashViewModel
 import com.jarvis.acg.viewModel.home.HomeViewModel
-import com.jarvis.acg.viewModel.manga.MangaSelectChapterViewModel
+import com.jarvis.acg.viewModel.manga.MangaChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
-import com.jarvis.acg.viewModel.novel.NovelSelectChapterViewModel
 
 class ViewModelFactory(owner: SavedStateRegistryOwner, defaultArgs: Bundle? = Bundle()) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
     override fun <T : ViewModel?> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
@@ -21,10 +20,9 @@ class ViewModelFactory(owner: SavedStateRegistryOwner, defaultArgs: Bundle? = Bu
                 isAssignableFrom(HomeViewModel::class.java) -> ViewModelBuilder.buildHomeViewModel()
 
 
-                isAssignableFrom(NovelSelectChapterViewModel::class.java) -> ViewModelBuilder.buildNovelSelectChapterViewModel(handle)
-                isAssignableFrom(NovelChapterViewModel::class.java) -> ViewModelBuilder.buildNovelChapterViewModel(handle)
+                isAssignableFrom(NovelChapterViewModel::class.java) -> ViewModelBuilder.buildNovelSelectChapterViewModel(handle)
 
-                isAssignableFrom(MangaSelectChapterViewModel::class.java) -> ViewModelBuilder.buildMangaSelectChapterViewModel(handle)
+                isAssignableFrom(MangaChapterViewModel::class.java) -> ViewModelBuilder.buildMangaSelectChapterViewModel(handle)
 
                 isAssignableFrom(EmptyViewModel::class.java) -> EmptyViewModel()
                 else ->

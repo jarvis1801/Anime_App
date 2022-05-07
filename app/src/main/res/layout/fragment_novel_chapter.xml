@@ -68,8 +68,6 @@
                     app:layout_constraintRight_toLeftOf="@id/guidelineVerticalCenter"
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:text="Previous Chapter"
-                    android:visibility="invisible"
-                    tools:visibility="visible"
                     style="@style/Widget.Material3.Button.Icon"
                     />
 
@@ -83,8 +81,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/guidelineVerticalCenter"
                     android:text="Next Chapter"
-                    android:visibility="invisible"
-                    tools:visibility="visible"
                     style="@style/Widget.Material3.Button.Icon"
                     />
 

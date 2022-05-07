@@ -2,7 +2,6 @@ package com.jarvis.acg.repository.manga
 
 import com.jarvis.acg.base.BaseDataSource
 import com.jarvis.acg.network.MangaService
-import com.jarvis.acg.network.NovelService
 import com.jarvis.acg.network.RetrofitClient
 
 class MangaRemoteDataSource : BaseDataSource() {

@@ -32,7 +32,7 @@ abstract class BaseRevampRecyclerViewAdapter(val context: Context) : RecyclerVie
         if (isNotifyDataChange) notifyDataSetChanged()
     }
 
-    fun addAllData(list: ArrayList<Any>, isNotifyDataChange: Boolean = true) {
+    open fun addAllData(list: ArrayList<*>, isNotifyDataChange: Boolean = true) {
         dataList.addAll(list)
         // todo change diff util
         if (isNotifyDataChange) notifyDataSetChanged()

@@ -1,19 +1,21 @@
 package com.jarvis.acg.ui.book
 
-import com.google.android.flexbox.FlexboxLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jarvis.acg.R
 import com.jarvis.acg.base.BaseFragment
 import com.jarvis.acg.databinding.FragmentBookSelectChapterBinding
 import com.jarvis.acg.model.Author
+import com.jarvis.acg.model.BaseChapter
 import com.jarvis.acg.model.Book
-import com.jarvis.acg.model.Novel
 import com.jarvis.acg.model.Work
-import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragment
+import com.jarvis.acg.model.chapter.Chapter
+import com.jarvis.acg.model.mangaChapter.MangaChapter
+import com.jarvis.acg.util.NavigationUtil.gotoMangaChapterFragment
 import com.jarvis.acg.util.NavigationUtil.gotoNovelChapterFragment
 import com.jarvis.acg.viewModel.MainViewModel
-import com.jarvis.acg.viewModel.book.BookSelectChapterViewModel
+import com.jarvis.acg.viewModel.book.BookChapterViewModel
 
-abstract class BookSelectChapterFragment<B: Book, VM: BookSelectChapterViewModel<B>> : BaseFragment<FragmentBookSelectChapterBinding, VM, MainViewModel>() {
+abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapterViewModel<B, C>> : BaseFragment<FragmentBookSelectChapterBinding, VM, MainViewModel>() {
 
     private var volumeChapterAdapter: BookVolumeChapterAdapter? = null
 
@@ -21,15 +23,31 @@ abstract class BookSelectChapterFragment<B: Book, VM: BookSelectChapterViewModel
 
     override fun getActivityViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
 
+    override var isChildViewModelShare: Boolean = true
+
+    override fun subscribeViewModel() {
+        super.subscribeViewModel()
+
+        observeViewModel()
+    }
+
     override fun initView() {
-        volumeChapterAdapter = BookVolumeChapterAdapter(requireContext()) { chapter ->
-            gotoNovelChapterFragment(chapter)
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        volumeChapterAdapter = BookVolumeChapterAdapter(requireContext()) { baseChapter ->
+        if (baseChapter is Chapter) {
+                gotoNovelChapterFragment(baseChapter)
+            } else if (baseChapter is MangaChapter) {
+                gotoMangaChapterFragment(baseChapter)
+            }
         }
 
         getDataBinding().rvBookChapter.apply {
-            layoutManager = FlexboxLayoutManager(requireContext())
-            adapter = volumeChapterAdapter
             setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = volumeChapterAdapter
         }
     }
 
@@ -38,17 +56,18 @@ abstract class BookSelectChapterFragment<B: Book, VM: BookSelectChapterViewModel
     }
 
     override fun initStartEvent() {
-        observeViewModel()
+        if (mViewModel?.getVolumeChapterList() == null) {
+            arguments?.run {
+                getString("bookId")?.let {
+                    mViewModel?.fetchAllInfo(it)
+                }
+            }
+        }
     }
 
     private fun observeViewModel() {
         mViewModel?.book?.observe(viewLifecycleOwner) { book ->
-            book?.let {
-                updateIsEnd(book)
-                if (book is Novel) {
-                    mActivityViewModel?.fetchNovelVolumeList(book)
-                }
-            }
+            book?.let { updateIsEnd(book) }
         }
 
         mViewModel?.work?.observe(viewLifecycleOwner) { work ->
@@ -63,17 +82,14 @@ abstract class BookSelectChapterFragment<B: Book, VM: BookSelectChapterViewModel
             }
         }
 
-        if (this is NovelSelectChapterFragment) {
-            mActivityViewModel?.novelVolumeChapterList?.observe(viewLifecycleOwner) { map ->
-                map?.let {
-                    mActivityViewModel?.getNovelVolumeChapterList()?.let { list ->
-                        volumeChapterAdapter?.clearData()
-                        volumeChapterAdapter?.addAllData(list)
-                    }
-                }
+        mViewModel?.volumeChapterList?.observe(viewLifecycleOwner) { list ->
+            list?.let {
+                volumeChapterAdapter?.clearData()
+                volumeChapterAdapter?.addAllData(list)
             }
         }
     }
+
 
     private fun updateIsEnd(novel: B) {
         novel.ended?.let { getDataBinding().tvIsEnd.text = if (novel.ended!!) "Ended" else "Not End Yet" }
@@ -88,7 +104,7 @@ abstract class BookSelectChapterFragment<B: Book, VM: BookSelectChapterViewModel
     }
 
     override fun onDestroy() {
-        mActivityViewModel?.setNovelVolumeChapterList(null)
+        mViewModel?.resetViewModel()
         super.onDestroy()
     }
 }

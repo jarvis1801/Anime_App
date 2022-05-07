@@ -1,10 +1,8 @@
 package com.jarvis.acg.ui.book
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.jarvis.acg.BR
 import com.jarvis.acg.base.BaseRevampRecyclerViewAdapter
@@ -12,10 +10,12 @@ import com.jarvis.acg.base.BaseRevampViewHolder
 import com.jarvis.acg.databinding.ItemBookSelectChapterBinding
 import com.jarvis.acg.databinding.ItemBookSelectVolumeBinding
 import com.jarvis.acg.extension.ViewExtension.Companion.addClick
-import com.jarvis.acg.model.chapter.Chapter
+import com.jarvis.acg.model.BaseChapter
 import com.jarvis.acg.model.Volume
+import com.jarvis.acg.model.chapter.Chapter
+import com.jarvis.acg.model.mangaChapter.MangaChapter
 
-class BookVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: Chapter) -> Unit) : BaseRevampRecyclerViewAdapter(context) {
+class BookVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: BaseChapter) -> Unit) : BaseRevampRecyclerViewAdapter(context) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -41,24 +41,27 @@ class BookVolumeChapterAdapter(context: Context, val onChapterClick: (chapter: C
         }
     }
 
-    inner class VolumeViewHolder(val binding: ViewDataBinding) : BaseRevampViewHolder<Volume>(binding.root) {
+    inner class VolumeViewHolder(val binding: ItemBookSelectVolumeBinding) : BaseRevampViewHolder<Volume>(binding.root) {
         override fun onBind(position: Int, item: Volume) {
             binding.setVariable(BR.volume, item)
             binding.executePendingBindings()
         }
     }
 
-    inner class ChapterViewHolder(val binding: ViewDataBinding) : BaseRevampViewHolder<Chapter>(binding.root) {
-        override fun onBind(position: Int, item: Chapter) {
-            binding.setVariable(BR.chapter, item)
+    inner class ChapterViewHolder(val binding: ItemBookSelectChapterBinding) : BaseRevampViewHolder<BaseChapter>(binding.root) {
+        override fun onBind(position: Int, item: BaseChapter) {
+            val title = if (item is Chapter) {
+                item.getNameForLocale()
+            } else if (item is MangaChapter) {
+                item.getSectionNameForLocale()
+            } else ""
+            binding.setVariable(BR.title, title)
             binding.executePendingBindings()
-            if (binding is ItemBookSelectChapterBinding) {
-                binding.chipChapter.apply {
-                    addClick({
-                        onChapterClick(item)
-                    })
-                    isSelected = item.isRead == true
-                }
+            binding.chipChapter.apply {
+                addClick({
+                    onChapterClick(item)
+                })
+                isSelected = item.isRead == true
             }
         }
     }

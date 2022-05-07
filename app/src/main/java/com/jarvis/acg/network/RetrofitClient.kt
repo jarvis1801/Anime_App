@@ -28,6 +28,7 @@ class RetrofitClient {
     fun getGitHubRetrofitClient() : Retrofit {
         return Retrofit.Builder()
             .baseUrl(GITHUB_URL)
+            .addConverterFactory(ToStringConverterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(getOkHttpClient())
             .build()
