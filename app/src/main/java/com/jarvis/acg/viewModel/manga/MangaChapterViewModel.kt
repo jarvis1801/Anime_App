@@ -7,6 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.jarvis.acg.extension.Extension.Companion.toArrayList
 import com.jarvis.acg.model.Manga
 import com.jarvis.acg.model.mangaChapter.MangaChapter
+import com.jarvis.acg.model.mangaChapter.MangaChapterPage
+import com.jarvis.acg.model.mangaChapter.MangaChapterPage.Companion.CHAPTER_PAGE_SMOOTH_SCROLL
+import com.jarvis.acg.model.mangaChapter.MangaChapterUpdateIsRead
+import com.jarvis.acg.model.mangaChapter.MangaChapterUpdateLastPosition
 import com.jarvis.acg.model.media.Image
 import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.chapter.ChapterRepository
@@ -27,7 +31,7 @@ class MangaChapterViewModel(
     authorRepository: AuthorRepository,
     volumeRepository: VolumeRepository,
     chapterRepository: ChapterRepository,
-    mangaChapterRepository: MangaChapterRepository,
+    private val mangaChapterRepository: MangaChapterRepository,
     private val imageRepository: ImageRepository
 ) : BookChapterViewModel<Manga, MangaChapter>(
     savedStateHandle,
@@ -42,11 +46,8 @@ class MangaChapterViewModel(
     override var _currentChapter: MutableLiveData<MangaChapter?> = MutableLiveData()
     val currentChapter = _currentChapter as LiveData<MangaChapter?>
 
-    private var _imageList: MutableLiveData<HashMap<String, ArrayList<Image>?>?> = MutableLiveData()
-    val imageList = _imageList as LiveData<HashMap<String, ArrayList<Image>?>?>
-
-    private var _currentChapterImageList: MutableLiveData<ArrayList<Image>?> = MutableLiveData()
-    val currentChapterImageList = _currentChapterImageList as LiveData<ArrayList<Image>?>
+    private val _page = MutableLiveData<MangaChapterPage>()
+    val page = _page as LiveData<MangaChapterPage>
 
     suspend fun getImageList(chapterList: ArrayList<MangaChapter>): HashMap<String, ArrayList<Image>?> {
         val hashMap = hashMapOf<String, ArrayList<Image>?>()
@@ -68,16 +69,43 @@ class MangaChapterViewModel(
         }
         request.await()
         return hashMap
-//        _imageList.postValue(hashMap)
     }
 
-    fun getImageListFromDB(chapter: MangaChapter) = viewModelScope.launch(IO) {
-        val list = async(IO) {
-            chapter.image_id_list?.toArrayList()?.takeIf { it.isNotEmpty() }?.let { idList ->
-                imageRepository.getListByIdListFromDB(idList)
-            }
-        }
+    fun getCurrentPage(): Int? {
+        return _page.value?.page
+    }
 
-        _currentChapterImageList.postValue(list.await())
+    fun setCurrentPage(page: Int, scrollType: Int = CHAPTER_PAGE_SMOOTH_SCROLL) {
+        _page.postValue(MangaChapterPage(page, scrollType))
+    }
+
+    fun getImageCount(): Int {
+        return _currentChapter.value?.image_id_list?.size ?: -1
+    }
+
+    fun updateChapterLastPosition(currentPage: Int) = viewModelScope.launch(IO) {
+        val currentChapter = getCurrentChapter()
+        val chapterId = currentChapter?.id
+
+        takeIf { !chapterId.isNullOrEmpty() }?.let {
+            currentChapter?.lastPosition = currentPage
+            mangaChapterRepository.updateChapterLastPosition(MangaChapterUpdateLastPosition(
+                id = chapterId!!,
+                lastPosition = currentPage
+            ))
+        }
+    }
+
+    fun enableIsReadWhenLastPage(page: Int, imageCount: Int) = viewModelScope.launch(IO) {
+        val currentChapter = getCurrentChapter()
+        val chapterId = currentChapter?.id
+
+        takeIf { !chapterId.isNullOrEmpty() && page >= imageCount }?.let {
+            currentChapter?.isRead = true
+            mangaChapterRepository.updateChapterIsRead(MangaChapterUpdateIsRead(
+                id = chapterId!!,
+                isRead = true
+            ))
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.jarvis.acg.model.media
 
+import android.content.Context
+import android.widget.ImageView
 import androidx.room.Entity
 import androidx.room.Ignore
 
@@ -9,4 +11,5 @@ class Image(
     var imageHeight: Int? = null,
 
     @Ignore var imageString: String? = null
-) : Media()
+) : Media() {
+}

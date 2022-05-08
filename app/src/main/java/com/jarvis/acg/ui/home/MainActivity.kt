@@ -1,6 +1,7 @@
 package com.jarvis.acg.ui.home
 
 import android.util.Log
+import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,14 +18,12 @@ class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
 
     override fun subscribeViewModel() {
         mViewModel?.requestLoading?.observe(this) {
-            Log.d("chris", "requestLoading $it")
             if (it == true) {
                 showLoading()
             }
         }
 
         mViewModel?.reduceLoading?.observe(this) {
-            Log.d("chris", "reduceLoading $it")
             if (it == true) {
                 hideLoading()
             }
@@ -56,11 +55,16 @@ class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
         getDataBinding().loadingFrame.hideLoading()
     }
 
+    fun isInterceptBack(): Boolean {
+        return getDataBinding().loadingFrame.visibility == View.VISIBLE
+    }
+
     override fun onBackPressed() {
         if (findNavController(R.id.nav_host_fragment).currentBackStackEntry?.destination?.id == R.id.homeFragment) {
             finishAffinity()
         } else {
-            super.onBackPressed()
+            if (!isInterceptBack())
+                super.onBackPressed()
         }
     }
 }

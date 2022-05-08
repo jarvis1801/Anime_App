@@ -49,6 +49,10 @@ abstract class BaseRevampRecyclerViewAdapter(val context: Context) : RecyclerVie
         notifyDataSetChanged()
     }
 
+    fun getItemsSize(): Int {
+        return dataList.size
+    }
+
     companion object {
         const val TYPE_UNKNOWN = -1
     }

@@ -8,11 +8,12 @@
             name="viewModel"
             type="com.jarvis.acg.viewModel.manga.MangaChapterViewModel" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.jarvis.acg.ui.customView.CustomConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.jarvis.acg.ui.customView.CustomRecyclerView
             android:id="@+id/rvChapterList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -38,5 +39,5 @@
 
         </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.jarvis.acg.ui.customView.CustomConstraintLayout>
 </layout>

@@ -1,5 +1,6 @@
 package com.jarvis.acg.viewModel.book
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -13,16 +14,19 @@ import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.book.BookRepository
 import com.jarvis.acg.repository.chapter.ChapterRepository
 import com.jarvis.acg.repository.mangaChapter.MangaChapterRepository
+import com.jarvis.acg.repository.resource.ResourceRemoteDataSource
 import com.jarvis.acg.repository.volume.VolumeRepository
 import com.jarvis.acg.repository.work.WorkRepository
 import com.jarvis.acg.util.DateTimeUtil
 import com.jarvis.acg.util.DateTimeUtil.convertDateToTimestamp
 import com.jarvis.acg.viewModel.manga.MangaChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
     private val savedStateHandle: SavedStateHandle,
@@ -47,6 +51,9 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
     var volumeChapterList = _volumeChapterList as LiveData<ArrayList<Any>?>
 
     abstract var _currentChapter: MutableLiveData<C?>
+
+    private var _notifyIndexChanged = MutableLiveData<Int?>(null)
+    var notifyIndexChanged = _notifyIndexChanged as LiveData<Int?>
 
     fun fetchAllInfo(bookId: String) = viewModelScope.launch(IO) {
         requestApi()
@@ -120,8 +127,31 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
 
     fun setCurrentMangaChapterById(id: String) = viewModelScope.launch(IO) {
         _volumeChapterList.value?.filterIsInstance<MangaChapter>()?.find { it.id == id }?.let { chapter ->
+            getImageResource(chapter)
             setCurrentChapter<MangaChapter>(chapter as C)
         }
+    }
+
+    private suspend fun getImageResource(chapter: MangaChapter) = viewModelScope.launch(IO) {
+
+        val lastPosition = chapter.lastPosition ?: 0
+        val nextPosition = lastPosition + 1
+        val prevPosition = lastPosition - 1
+        val notifyList = arrayListOf(lastPosition)
+        if (prevPosition >= 0) notifyList.add(prevPosition)
+        if (nextPosition < chapter.imageList?.size ?: 0) notifyList.add(nextPosition)
+
+        chapter.imageList?.mapIndexed { index, item -> item.url }?.mapIndexed { index, url ->
+            async(IO) {
+                if (url != null) {
+                    val imageRequest = ResourceRemoteDataSource().getImageResource(url)
+                    chapter.imageList!![index].imageString = imageRequest.data
+
+                    if (notifyList.contains(index))
+                        _notifyIndexChanged.postValue(index)
+                }
+            }
+        }?.map { it.await() }
     }
 
     fun setCurrentChapterById(id: String) = viewModelScope.launch(IO) {
@@ -134,11 +164,19 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
         return _volumeChapterList.value
     }
 
+    fun getCurrentChapter(): C? {
+        return _currentChapter.value
+    }
+
     open fun resetViewModel() {
         _book.postValue(null)
         _work.postValue(null)
         _authorList.postValue(null)
         _volumeChapterList.postValue(null)
+        _currentChapter.postValue(null)
+    }
+
+    fun resetViewModelForChapterPage() {
         _currentChapter.postValue(null)
     }
 }

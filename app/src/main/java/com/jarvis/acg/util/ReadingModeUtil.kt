@@ -5,6 +5,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.jarvis.acg.ui.manga.chapter.MangaContentAdapter
 
 class ReadingModeUtil {
     companion object {
@@ -21,16 +22,16 @@ class ReadingModeUtil {
         )
     }
 
-    fun getReadingMode(context: Context): Int {
-        return 0
+    fun getReadingMode(): Int {
+        return SharedPreferencesUtil().getReadingMode()
     }
 
-    fun setReadingMode(context: Context, value: Int) {
-
+    fun setReadingMode(readingMode: Int) {
+        SharedPreferencesUtil().setReadingMode(readingMode)
     }
 
-    fun changeType(context: Context, snapHelper: PagerSnapHelper, linearLayoutManager: LinearLayoutManager, recyclerView: RecyclerView) {
-        val readingMode = getReadingMode(context)
+    fun changeType(snapHelper: PagerSnapHelper, linearLayoutManager: LinearLayoutManager, recyclerView: RecyclerView) {
+        val readingMode = getReadingMode()
         val orientation = when (readingMode) {
             TYPE_READING_MODE_FLIP_LEFT_RIGHT, TYPE_READING_MODE_NOT_FLIP_LEFT_RIGHT -> {
                 LinearLayoutManager.HORIZONTAL
@@ -53,6 +54,9 @@ class ReadingModeUtil {
             }
         }
         val adapter = recyclerView.adapter
+        if (adapter is MangaContentAdapter) {
+            adapter.setReadingModeType(readingMode)
+        }
         adapter?.notifyItemRangeChanged(0, adapter.itemCount)
     }
 

@@ -1,19 +1,24 @@
 package com.jarvis.acg.ui.book
 
+import android.os.BaseBundle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.jarvis.acg.R
 import com.jarvis.acg.base.BaseFragment
+import com.jarvis.acg.base.BaseMultiTypeAdapter
 import com.jarvis.acg.databinding.FragmentBookSelectChapterBinding
-import com.jarvis.acg.model.Author
-import com.jarvis.acg.model.BaseChapter
-import com.jarvis.acg.model.Book
-import com.jarvis.acg.model.Work
+import com.jarvis.acg.extension.Extension.Companion.toArrayList
+import com.jarvis.acg.model.*
 import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.mangaChapter.MangaChapter
 import com.jarvis.acg.util.NavigationUtil.gotoMangaChapterFragment
 import com.jarvis.acg.util.NavigationUtil.gotoNovelChapterFragment
 import com.jarvis.acg.viewModel.MainViewModel
 import com.jarvis.acg.viewModel.book.BookChapterViewModel
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapterViewModel<B, C>> : BaseFragment<FragmentBookSelectChapterBinding, VM, MainViewModel>() {
 
@@ -37,12 +42,13 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
 
     private fun initRecyclerView() {
         volumeChapterAdapter = BookVolumeChapterAdapter(requireContext()) { baseChapter ->
-        if (baseChapter is Chapter) {
+            if (baseChapter is Chapter) {
                 gotoNovelChapterFragment(baseChapter)
             } else if (baseChapter is MangaChapter) {
                 gotoMangaChapterFragment(baseChapter)
             }
         }
+
 
         getDataBinding().rvBookChapter.apply {
             setHasFixedSize(true)

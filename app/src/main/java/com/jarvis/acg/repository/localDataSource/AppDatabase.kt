@@ -10,7 +10,7 @@ import com.jarvis.acg.model.media.Image
 import com.jarvis.acg.repository.localDataSource.dao.*
 
 @Database(entities = [Novel::class, Work::class, Painter::class, Library::class, PublishingHouse::class,
-    Author::class, Chapter::class, Volume::class, Manga::class, MangaChapter::class, Image::class], version = 1)
+    Author::class, Chapter::class, Volume::class, Manga::class, MangaChapter::class, Image::class], version = 1, exportSchema = false)
 @TypeConverters(GenericDataConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun novelDao(): NovelDao

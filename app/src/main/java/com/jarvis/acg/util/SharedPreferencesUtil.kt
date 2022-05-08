@@ -18,6 +18,14 @@ class SharedPreferencesUtil {
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
+    fun setReadingMode(value: Int) {
+        editInt(KEY_READING_MODE, value)
+    }
+
+    fun getReadingMode(): Int {
+        return getInt(KEY_READING_MODE, 0)
+    }
+
     fun editInt(key: String, value: Int) {
         val sharedPreferences = getSharedPreferences()
         val editor = sharedPreferences.edit()
@@ -64,5 +72,9 @@ class SharedPreferencesUtil {
     fun getBoolean(key: String, defValue: Boolean = false): Boolean {
         val sharedPreferences = getSharedPreferences()
         return sharedPreferences.getBoolean(key, defValue)
+    }
+
+    companion object {
+        const val KEY_READING_MODE = "KEY_READING_MODE"
     }
 }

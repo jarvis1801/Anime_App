@@ -1,7 +1,6 @@
 package com.jarvis.acg.model.chapter
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import com.jarvis.acg.model.BaseChapter
 import com.jarvis.acg.model.BaseNameObject
 import com.jarvis.acg.model.Translation

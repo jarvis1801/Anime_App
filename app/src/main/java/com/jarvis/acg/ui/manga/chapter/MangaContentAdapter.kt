@@ -1,14 +1,20 @@
 package com.jarvis.acg.ui.manga.chapter
 
-import android.R.attr.data
 import android.content.Context
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.jarvis.acg.base.BaseSingleRecyclerViewAdapter
 import com.jarvis.acg.base.BaseSingleViewHolder
 import com.jarvis.acg.databinding.ItemMangaContentBinding
@@ -22,44 +28,57 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.io.ByteArrayInputStream
-import kotlin.text.Charsets.UTF_8
+import kotlinx.coroutines.withContext
 
 
-class MangaContentAdapter(context: Context) : BaseSingleRecyclerViewAdapter<ItemMangaContentBinding, MangaContentAdapter.ViewHolder, Image>(context) {
+class MangaContentAdapter(context: Context, val screenWidth: Int, val screenHeight: Int) : BaseSingleRecyclerViewAdapter<ItemMangaContentBinding, MangaContentAdapter.ViewHolder, Image>(context) {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> ItemMangaContentBinding
         get() = ItemMangaContentBinding::inflate
+
+    private var readingMode = ReadingModeUtil().getReadingMode()
 
     override fun getViewHolderClass(databinding: ItemMangaContentBinding): ViewHolder {
         return ViewHolder(databinding)
     }
 
+    fun setReadingModeType(readingMode: Int) {
+        this.readingMode = readingMode
+    }
+
     inner class ViewHolder(val binding: ItemMangaContentBinding) : BaseSingleViewHolder<Image>(binding) {
         override fun onBind(position: Int, item: Image) {
+            item.requestLayoutParam(readingMode)
             super.onBind(position, item)
 
-            item.requestLayoutParam(ReadingModeUtil().getReadingMode(context))
-            item.url?.let {
-                GlobalScope.launch(Main) {
-                    if (item.imageString == null) {
-                        val imageRequest = async(IO) { ResourceRemoteDataSource().getImageResource(item.url!!) }
-                        val imageString = imageRequest.await().data
-                        item.imageString = imageString
-                    }
-
-                    item.imageString?.let {
-                        val imageDecodeByte = CipherUtil.decode(item.imageString!!)
-
-                        Glide.with(context)
-                            .asDrawable()
-                            .load(imageDecodeByte)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true)
-                            .into(binding.imgContent)
-                    }
-                }
+            item.imageString?.let {
+                loadImage(it)
             }
+
+        }
+
+        private fun loadImage(imageString: String) {
+            val imageDecodeByte = CipherUtil.decode(imageString)
+
+            val glide = Glide.with(context)
+                .asBitmap()
+                .load(imageDecodeByte)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .listener(object : RequestListener<Bitmap> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
+                        getViewDataBinding().loading.visibility = View.GONE
+                        return true
+                    }
+
+                    override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        getViewDataBinding().loading.visibility = View.GONE
+                        return false
+                    }
+
+                })
+
+
+            glide.into(binding.imgContent)
         }
 
         private fun Image.requestLayoutParam(readingMode: Int) {
@@ -74,7 +93,6 @@ class MangaContentAdapter(context: Context) : BaseSingleRecyclerViewAdapter<Item
 
         private fun requestHeight(item: Image): Int {
             if (item.imageHeight != null && item.imageWidth != null) {
-                val screenWidth = DeviceUtil.getScreenWidth()
                 val ratio = item.imageHeight!! / item.imageWidth!!.toFloat()
 
                 return (screenWidth * ratio).toInt()
@@ -84,7 +102,6 @@ class MangaContentAdapter(context: Context) : BaseSingleRecyclerViewAdapter<Item
 
         private fun requestWidth(item: Image): Int {
             if (item.imageWidth != null && item.imageHeight != null) {
-                val screenHeight = DeviceUtil.getScreenWidth()
                 val ratio = item.imageWidth!! / item.imageHeight!!.toFloat()
                 return (screenHeight * ratio).toInt()
             }

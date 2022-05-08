@@ -2,7 +2,9 @@ package com.jarvis.acg.extension
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.TypedValue
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.FormBody
@@ -32,5 +34,10 @@ class Extension {
         inline fun <reified T> List<T>?.toArrayList() : ArrayList<T> {
             return this?.toCollection(ArrayList()) ?: arrayListOf()
         }
+
+        val Number.toPx get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics)
     }
 }

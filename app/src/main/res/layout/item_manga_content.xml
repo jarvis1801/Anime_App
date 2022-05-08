@@ -9,7 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:indeterminate="true"
+            android:layout_gravity="center"
+            />
+
+        <com.jarvis.acg.ui.customView.CustomImageView
             android:id="@+id/img_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
