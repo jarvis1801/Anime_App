@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.jarvis.acg.repository.localDataSource.AppDatabase
+import com.jarvis.acg.util.DarkModeUtil.changeDarkMode
+import com.jarvis.acg.util.DarkModeUtil.initDarkModeWhenStart
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -23,6 +25,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        initDarkModeWhenStart()
 
         database = Room.databaseBuilder(this, AppDatabase::class.java, applicationContext.packageName)
 //            .addMigrations(MIGRATION_1_2)

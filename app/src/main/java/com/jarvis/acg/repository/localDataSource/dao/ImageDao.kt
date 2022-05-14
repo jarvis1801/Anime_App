@@ -1,10 +1,9 @@
 package com.jarvis.acg.repository.localDataSource.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.jarvis.acg.model.media.Image
+import com.jarvis.acg.model.media.ImageUpdateImageString
+import com.jarvis.acg.model.media.ImageUpdateOrigin
 
 @Dao
 interface ImageDao {
@@ -22,4 +21,13 @@ interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(obj: Image)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertIgnore(obj: Image)
+
+    @Update(entity = Image::class)
+    fun updateImageString(obj: ImageUpdateImageString): Int
+
+    @Update(entity = Image::class)
+    fun updateImage(obj: ImageUpdateOrigin): Int
 }

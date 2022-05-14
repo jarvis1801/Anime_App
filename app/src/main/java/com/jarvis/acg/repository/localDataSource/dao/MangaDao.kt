@@ -1,10 +1,10 @@
 package com.jarvis.acg.repository.localDataSource.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
+import com.jarvis.acg.model.BookUpdateLastSeen
 import com.jarvis.acg.model.Manga
+import com.jarvis.acg.model.chapter.Chapter
+import com.jarvis.acg.model.chapter.ChapterUpdate
 
 @Dao
 interface MangaDao {
@@ -22,4 +22,7 @@ interface MangaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(obj: Manga)
+
+    @Update(entity = Manga::class)
+    fun updateLastSeen(obj: BookUpdateLastSeen): Int
 }

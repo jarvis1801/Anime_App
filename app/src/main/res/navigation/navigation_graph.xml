@@ -99,6 +99,9 @@
             android:name="chapterId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_novelChapterFragment_to_novelChapterContentSettingFragment"
+            app:destination="@id/novelChapterContentSettingFragment" />
 
     </fragment>
     <fragment
@@ -131,7 +134,8 @@
     <fragment
         android:id="@+id/mangaChapterFragment"
         android:name="com.jarvis.acg.ui.manga.chapter.MangaChapterFragment"
-        android:label="MangaChapterFragment">
+        android:label="MangaChapterFragment"
+        tools:layout="@layout/fragment_manga_chapter">
 
         <argument
             android:name="chapterId"
@@ -139,4 +143,10 @@
             app:nullable="true" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/novelChapterContentSettingFragment"
+        android:name="com.jarvis.acg.ui.novel.chapter.NovelChapterContentSettingFragment"
+        android:label="NovelChapterContentSettingFragment"
+        tools:layout="@layout/fragment_novel_content_setting"/>
 </navigation>

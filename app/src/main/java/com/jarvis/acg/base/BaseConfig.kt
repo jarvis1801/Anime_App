@@ -2,7 +2,8 @@ package com.jarvis.acg.base
 
 import com.google.gson.Gson
 import com.jarvis.acg.App
-import com.jarvis.acg.util.SharedPreferencesUtil
+import com.jarvis.acg.util.EncryptedPreferenceDataStore.getString
+import com.jarvis.acg.util.EncryptedPreferenceDataStore.putString
 
 abstract class BaseConfig<T> {
     abstract var TAG: String
@@ -10,7 +11,7 @@ abstract class BaseConfig<T> {
     abstract fun provideConfig(configStr: String) : T
 
     fun getConfig(): T {
-        var configStr = SharedPreferencesUtil().getString(TAG)
+        var configStr = TAG.getString("")
         if (configStr.isBlank()) {
             configStr = getConfigAsset()
         }
@@ -20,7 +21,7 @@ abstract class BaseConfig<T> {
 
     fun saveConfig(config: T) {
         val configStr = Gson().toJson(config)
-        SharedPreferencesUtil().editString(TAG, configStr)
+        TAG.putString(configStr)
     }
 
     private fun getConfigAsset() : String {

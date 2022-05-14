@@ -18,73 +18,91 @@
             android:layout_height="match_parent"
             android:scrollbars="none">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/llContent"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="27dp"
-                android:scrollbars="none">
+                android:layout_height="wrap_content">
 
-                <com.jarvis.acg.ui.customView.CustomTextView
-                    android:id="@+id/tvTitle"
+                <ImageView
+                    android:id="@+id/ivSetting"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_baseline_settings_48"
+                    android:contentDescription="setting" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/llContent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="27dp"
-                    android:layout_marginBottom="7dp"
-                    android:text="@{viewModel.currentChapter.getTitle}"
-                    android:textAlignment="center"
-                    android:textIsSelectable="true"
-                    android:maxLines="1"
-                    android:ellipsize="marquee"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="序章 - 關於序章" />
-
-                <com.jarvis.acg.ui.customView.CustomTextView
-                    android:id="@+id/tvContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="7dp"
-                    android:text="@{viewModel.currentChapter.getChapterContent}"
-                    android:textIsSelectable="true"
-                    app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                    tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."/>
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineVerticalCenter"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="27dp"
+                    android:scrollbars="none">
 
-                <com.jarvis.acg.ui.customView.CustomMaterialButton
-                    android:id="@+id/imgPrevChapter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="20dp"
-                    app:icon="@drawable/ic_baseline_arrow_back_48"
-                    app:layout_constraintTop_toBottomOf="@id/tvContent"
-                    app:layout_constraintRight_toLeftOf="@id/guidelineVerticalCenter"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:text="Previous Chapter"
-                    style="@style/Widget.Material3.Button.Icon"
-                    />
+                    <com.jarvis.acg.ui.customView.CustomTextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="27dp"
+                        android:text="@{viewModel.currentChapter.getTitle}"
+                        android:textAlignment="center"
+                        android:textIsSelectable="true"
+                        android:maxLines="1"
+                        android:ellipsize="marquee"
+                        app:isChapterContent="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/dummy_title" />
 
-                <com.jarvis.acg.ui.customView.CustomMaterialButton
-                    android:id="@+id/imgNextChapter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="20dp"
-                    app:icon="@drawable/ic_baseline_arrow_forward_48"
-                    app:layout_constraintTop_toBottomOf="@id/tvContent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/guidelineVerticalCenter"
-                    android:text="Next Chapter"
-                    style="@style/Widget.Material3.Button.Icon"
-                    />
+                    <com.jarvis.acg.ui.customView.CustomTextView
+                        android:id="@+id/tvContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="7dp"
+                        android:text="@{viewModel.currentChapter.getChapterContent}"
+                        android:textIsSelectable="true"
+                        app:isChapterContent="true"
+                        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+                        tools:text="@string/dummy_content" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guidelineVerticalCenter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <com.jarvis.acg.ui.customView.CustomMaterialButton
+                        android:id="@+id/imgPrevChapter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="20dp"
+                        app:icon="@drawable/ic_baseline_arrow_back_48"
+                        app:layout_constraintTop_toBottomOf="@id/tvContent"
+                        app:layout_constraintRight_toLeftOf="@id/guidelineVerticalCenter"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:text="Previous Chapter"
+                        style="@style/Widget.Material3.Button.Icon"
+                        />
+
+                    <com.jarvis.acg.ui.customView.CustomMaterialButton
+                        android:id="@+id/imgNextChapter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="20dp"
+                        app:icon="@drawable/ic_baseline_arrow_forward_48"
+                        app:layout_constraintTop_toBottomOf="@id/tvContent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/guidelineVerticalCenter"
+                        android:text="Next Chapter"
+                        style="@style/Widget.Material3.Button.Icon"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
 
         </ScrollView>
 

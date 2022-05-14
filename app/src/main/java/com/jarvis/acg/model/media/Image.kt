@@ -10,6 +10,6 @@ class Image(
     var imageWidth: Int? = null,
     var imageHeight: Int? = null,
 
-    @Ignore var imageString: String? = null
+    var imageString: String? = null
 ) : Media() {
 }

@@ -1,6 +1,7 @@
 package com.jarvis.acg.repository.manga
 
 import com.jarvis.acg.extension.Extension.Companion.toArrayList
+import com.jarvis.acg.model.BookUpdateLastSeen
 import com.jarvis.acg.model.Manga
 import com.jarvis.acg.repository.book.BookRepository
 import com.jarvis.acg.repository.localDataSource.dao.MangaDao
@@ -17,4 +18,8 @@ class MangaRepository(
     )
 
     override fun getBookByIdFromDB(id: String?) = mangaDao.getById(id)
+
+    override fun updateBookLastSeen(bookUpdateLastSeen: BookUpdateLastSeen) {
+        mangaDao.updateLastSeen(bookUpdateLastSeen)
+    }
 }

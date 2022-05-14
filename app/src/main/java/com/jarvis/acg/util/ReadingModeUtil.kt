@@ -1,11 +1,12 @@
 package com.jarvis.acg.util
 
-import android.content.Context
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jarvis.acg.ui.manga.chapter.MangaContentAdapter
+import com.jarvis.acg.util.EncryptedPreferenceDataStore.KEY_READING_MODE
+import com.jarvis.acg.util.EncryptedPreferenceDataStore.getInt
+import com.jarvis.acg.util.EncryptedPreferenceDataStore.putInt
 
 class ReadingModeUtil {
     companion object {
@@ -23,11 +24,11 @@ class ReadingModeUtil {
     }
 
     fun getReadingMode(): Int {
-        return SharedPreferencesUtil().getReadingMode()
+        return KEY_READING_MODE.getInt(TYPE_READING_MODE_FLIP_LEFT_RIGHT)
     }
 
     fun setReadingMode(readingMode: Int) {
-        SharedPreferencesUtil().setReadingMode(readingMode)
+        KEY_READING_MODE.putInt(readingMode)
     }
 
     fun changeType(snapHelper: PagerSnapHelper, linearLayoutManager: LinearLayoutManager, recyclerView: RecyclerView) {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="setting_dark_mode_entries">
+        <item>Follow System</item>
+        <item>Light Mode</item>
+        <item>Dark Mode</item>
+    </string-array>
+
+    <string-array name="setting_i18n_entries">
+        <item>English</item>
+        <item>Traditional Chinese</item>
+        <item>Japanese</item>
+    </string-array>
+</resources>

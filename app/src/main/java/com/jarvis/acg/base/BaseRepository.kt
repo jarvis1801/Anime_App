@@ -2,6 +2,7 @@ package com.jarvis.acg.base
 
 import com.jarvis.acg.repository.Resource
 import com.jarvis.acg.repository.Status
+import com.jarvis.acg.util.EncryptedPreferenceDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -11,7 +12,7 @@ abstract class BaseRepository {
                                             saveCallResult: suspend (A) -> Unit) : Resource<A> = withContext(Dispatchers.IO) {
 
         var response : Resource<A>? = null
-        if (true) {
+        if (EncryptedPreferenceDataStore.isEnableApi()) {
             response = networkCall.invoke()
         }
         val statusCode = response?.statusCode
@@ -19,7 +20,8 @@ abstract class BaseRepository {
             Status.SUCCESS -> {
                 val data = response.data!!
                 saveCallResult(data)
-                return@withContext Resource.success(data, statusCode)
+                val resultData = databaseQuery.invoke()
+                return@withContext Resource.success(resultData, statusCode)
             }
             Status.ERROR -> {
                 val error = response.message

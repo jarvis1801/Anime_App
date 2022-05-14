@@ -52,11 +52,15 @@ class MangaChapterFragment : BaseFragment<FragmentMangaChapterBinding, MangaChap
         super.subscribeViewModel()
 
         mViewModel?.currentChapter?.observe(viewLifecycleOwner) { mangaChapter ->
-            mangaChapter?.imageList?.let { imageList ->
-                mangaContentAdapter?.clearData()
-                mangaContentAdapter?.addAllData(imageList)
-                mViewModel?.setCurrentPage(mangaChapter.lastPosition ?: 0, MangaChapterPage.CHAPTER_PAGE_SCROLL)
-                updateProgressBarPage(imageList.size)
+            mangaChapter?.apply {
+                mViewModel?.updateBookLastSeen(mangaChapter)
+
+                imageList?.let { imageList ->
+                    mangaContentAdapter?.clearData()
+                    mangaContentAdapter?.addAllData(imageList)
+                    mViewModel?.setCurrentPage(mangaChapter.lastPosition ?: 0, MangaChapterPage.CHAPTER_PAGE_SCROLL)
+                    updateProgressBarPage(imageList.size)
+                }
             }
         }
 
@@ -73,7 +77,7 @@ class MangaChapterFragment : BaseFragment<FragmentMangaChapterBinding, MangaChap
         }
 
         mViewModel?.notifyIndexChanged?.observe(viewLifecycleOwner) {
-            if (it != null && it > 0 && it < mangaContentAdapter?.getItemsSize() ?: -1) {
+            if (it != null && it >= 0 && it < mangaContentAdapter?.getItemsSize() ?: -1) {
                 mangaContentAdapter?.notifyItemChanged(it)
             }
         }

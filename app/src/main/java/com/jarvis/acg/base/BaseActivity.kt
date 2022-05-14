@@ -1,5 +1,6 @@
 package com.jarvis.acg.base
 
+import android.content.Context
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.jarvis.acg.BR
+import com.jarvis.acg.util.LanguageUtil
 import com.jarvis.acg.viewModel.ViewModelFactory
 
 
@@ -57,5 +59,9 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel> : AppCompa
 
     fun getFragmentStack(): Int {
         return supportFragmentManager.backStackEntryCount
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(LanguageUtil.createContextForLangChange(base))
     }
 }

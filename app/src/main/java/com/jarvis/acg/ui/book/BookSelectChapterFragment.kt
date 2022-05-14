@@ -1,24 +1,19 @@
 package com.jarvis.acg.ui.book
 
-import android.os.BaseBundle
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
 import com.jarvis.acg.R
 import com.jarvis.acg.base.BaseFragment
-import com.jarvis.acg.base.BaseMultiTypeAdapter
 import com.jarvis.acg.databinding.FragmentBookSelectChapterBinding
-import com.jarvis.acg.extension.Extension.Companion.toArrayList
+import com.jarvis.acg.extension.ViewExtension.Companion.addClick
 import com.jarvis.acg.model.*
 import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.mangaChapter.MangaChapter
+import com.jarvis.acg.ui.manga.select.MangaSelectChapterFragment
+import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragment
 import com.jarvis.acg.util.NavigationUtil.gotoMangaChapterFragment
 import com.jarvis.acg.util.NavigationUtil.gotoNovelChapterFragment
 import com.jarvis.acg.viewModel.MainViewModel
 import com.jarvis.acg.viewModel.book.BookChapterViewModel
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 
 abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapterViewModel<B, C>> : BaseFragment<FragmentBookSelectChapterBinding, VM, MainViewModel>() {
 
@@ -42,11 +37,7 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
 
     private fun initRecyclerView() {
         volumeChapterAdapter = BookVolumeChapterAdapter(requireContext()) { baseChapter ->
-            if (baseChapter is Chapter) {
-                gotoNovelChapterFragment(baseChapter)
-            } else if (baseChapter is MangaChapter) {
-                gotoMangaChapterFragment(baseChapter)
-            }
+            gotoChapterPage(baseChapter.id)
         }
 
 
@@ -73,7 +64,10 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
 
     private fun observeViewModel() {
         mViewModel?.book?.observe(viewLifecycleOwner) { book ->
-            book?.let { updateIsEnd(book) }
+            book?.let {
+                updateIsEnd(book)
+                mViewModel?.getLastSeenTitle(book)
+            }
         }
 
         mViewModel?.work?.observe(viewLifecycleOwner) { work ->
@@ -93,6 +87,34 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
                 volumeChapterAdapter?.clearData()
                 volumeChapterAdapter?.addAllData(list)
             }
+        }
+
+        mViewModel?.lastSeenChapterTitle?.observe(viewLifecycleOwner) { title ->
+            title.let {
+                getDataBinding().btnChapterNavigate.apply {
+                    text = if (title != null) { "繼續 $title" } else { "開始" }
+                    addClick({
+                        if (title != null) {
+                            mViewModel?.getBook()?.last_chapter_id?.let {
+                                gotoChapterPage(it)
+                            }
+                        } else {
+                            mViewModel?.getVolumeChapterList()?.let { list ->
+                                val id = list.filterIsInstance<BaseChapter>().first().id
+                                gotoChapterPage(id)
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    private fun gotoChapterPage(id: String) {
+        if (this is NovelSelectChapterFragment) {
+            gotoNovelChapterFragment(id)
+        } else if (this is MangaSelectChapterFragment) {
+            gotoMangaChapterFragment(id)
         }
     }
 

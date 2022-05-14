@@ -8,25 +8,27 @@ import com.jarvis.acg.model.Work
 import com.jarvis.acg.ui.home.section.adapter.BookSectionAdapter
 import com.jarvis.acg.util.NavigationUtil.gotoMangaSelectChapterFragment
 import com.jarvis.acg.util.NavigationUtil.gotoNovelSelectChapterFragment
-import com.jarvis.acg.viewModel.EmptyViewModel
 import com.jarvis.acg.viewModel.MainViewModel
+import com.jarvis.acg.viewModel.home.BookSectionViewModel
 
-abstract class BookSectionFragment : BaseFragment<FragmentBookSectionBinding, EmptyViewModel, MainViewModel>() {
+abstract class BookSectionFragment<VM: BookSectionViewModel<*, *>> : BaseFragment<FragmentBookSectionBinding, VM, MainViewModel>() {
     private lateinit var sectionAdapter: BookSectionAdapter
 
     override fun getLayoutId(): Int { return R.layout.fragment_book_section }
 
-    override fun getViewModelClass(): Class<EmptyViewModel> { return EmptyViewModel::class.java }
-
     override fun getActivityViewModelClass(): Class<MainViewModel> { return MainViewModel::class.java }
+
+    override fun subscribeViewModel() {
+        super.subscribeViewModel()
+        mViewModel?.workList?.observe(viewLifecycleOwner) { list ->
+            mViewModel?.requestApiFinished()
+            list?.let { updateWorkList(list) }
+        }
+    }
 
     override fun initView() {
         sectionAdapter = BookSectionAdapter(requireContext()) { work ->
-            if (this is NovelSectionFragment) {
-                gotoNovelSelectChapterFragment(work)
-            } else if (this is MangaSectionFragment) {
-                gotoMangaSelectChapterFragment(work)
-            }
+            goToSelectChapterPage(work)
         }
 
         getDataBinding().rvWork.apply {
@@ -39,19 +41,7 @@ abstract class BookSectionFragment : BaseFragment<FragmentBookSectionBinding, Em
     }
 
     override fun initStartEvent() {
-        observeViewModel()
-    }
-
-    private fun observeViewModel() {
-        if (this is NovelSectionFragment) {
-            mActivityViewModel?.novelWorkList?.observe(requireActivity()) { workList ->
-                updateWorkList(workList)
-            }
-        } else if (this is MangaSectionFragment) {
-            mActivityViewModel?.mangaWorkList?.observe(requireActivity()) { workList ->
-                updateWorkList(workList)
-            }
-        }
+        mViewModel?.fetchBook()
     }
 
     private fun updateWorkList(workList: ArrayList<Work>) {
@@ -59,4 +49,6 @@ abstract class BookSectionFragment : BaseFragment<FragmentBookSectionBinding, Em
         sectionAdapter.clearData()
         sectionAdapter.addAllData(resultList)
     }
+
+    abstract fun goToSelectChapterPage(work: Work)
 }

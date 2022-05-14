@@ -1,6 +1,5 @@
 package com.jarvis.acg.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,6 +11,7 @@ import com.jarvis.acg.model.Work
 import com.jarvis.acg.repository.Status
 import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.chapter.ChapterRepository
+import com.jarvis.acg.repository.image.ImageRepository
 import com.jarvis.acg.repository.library.LibraryRepository
 import com.jarvis.acg.repository.manga.MangaRepository
 import com.jarvis.acg.repository.mangaChapter.MangaChapterRepository
@@ -21,7 +21,6 @@ import com.jarvis.acg.repository.publishingHouse.PublishingHouseRepository
 import com.jarvis.acg.repository.volume.VolumeRepository
 import com.jarvis.acg.repository.work.WorkRepository
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -35,10 +34,14 @@ class MainViewModel(
     private val authorRepository: AuthorRepository,
     private val volumeRepository: VolumeRepository,
     private val chapterRepository: ChapterRepository,
-    private val mangaChapterRepository: MangaChapterRepository
+    private val mangaChapterRepository: MangaChapterRepository,
+    private val imageRepository: ImageRepository
 ) : BaseViewModel() {
     private var _novelWorkList = MutableLiveData<ArrayList<Work>>()
     var novelWorkList = _novelWorkList as LiveData<ArrayList<Work>>
+
+    private var _notifyNovelWorkIndexChanged = MutableLiveData<Int?>(null)
+    var notifyNovelWorkIndexChanged = _notifyNovelWorkIndexChanged as LiveData<Int?>
 
     private var _mangaWorkList = MutableLiveData<ArrayList<Work>>()
     var mangaWorkList = _mangaWorkList as LiveData<ArrayList<Work>>
@@ -54,40 +57,42 @@ class MainViewModel(
             requestApi()
             val resource = novelRepository.getBookList()
             val novelWorkList = resource.data.takeIf { it != null && it.size > 0 }?.let { fetchBookDetail(it, "novel") }
-            novelWorkList.takeIf { it != null }?.let { _novelWorkList.postValue(novelWorkList!!) }
+            novelWorkList?.let { _novelWorkList.postValue(it) }
         }
     }
 
     private suspend fun <T : Book> fetchBookDetail(novelList: ArrayList<T>, acgType: String): ArrayList<Work> = withContext(IO) {
         val workList = arrayListOf<Work>()
         novelList.forEach { book ->
-            launch { book.work_id?.let {
-                val work = workRepository.getWorkById(it).data
-                work?.apply {
-                    book_id = book.id
-                    workList.add(work)
+            withContext(IO) {
+                book.work_id?.let {
+                    val work = workRepository.getWorkById(it).data
+                    work?.apply {
+                        book_id = book.id
+                        workList.add(work)
+                    }
                 }
-            } }
+            }
 
-            launch { book.painter_id_list?.let {
+            withContext(IO) { book.painter_id_list?.let {
                 painterRepository.getPainterListByIdList(it.join("_"))
             } }
 
             if (book is Novel) {
-                launch { book.library_id_list?.let {
+                withContext(IO) { book.library_id_list?.let {
                     libraryRepository.getLibraryListByIdList(it.join("_"))
                 } }
             }
 
-            launch { book.publishing_house_id_list?.let {
+            withContext(IO) { book.publishing_house_id_list?.let {
                 publishingHouseRepository.getPublishingHouseListByIdList(it.join("_"))
             } }
 
-            launch { book.author_id_list?.let {
+            withContext(IO) { book.author_id_list?.let {
                 authorRepository.getAuthorListByIdList(it)
             } }
 
-            launch {
+            withContext(IO) {
                 book.volume_id_list?.let { volumeRepository.getVolumeListByIdList(it) }?.takeIf { it.data != null }?.let { response ->
                     response.data?.let { data ->
                         if (response.status == Status.SUCCESS) {

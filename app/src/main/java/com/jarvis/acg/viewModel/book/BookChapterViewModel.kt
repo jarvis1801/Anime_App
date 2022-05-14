@@ -55,6 +55,9 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
     private var _notifyIndexChanged = MutableLiveData<Int?>(null)
     var notifyIndexChanged = _notifyIndexChanged as LiveData<Int?>
 
+    private var _lastSeenTitle = MutableLiveData<String?>()
+    var lastSeenChapterTitle = _lastSeenTitle as LiveData<String?>
+
     fun fetchAllInfo(bookId: String) = viewModelScope.launch(IO) {
         requestApi()
         val book = bookRepository.getBookByIdFromDB(bookId)
@@ -67,7 +70,7 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
                 }
             }
             _volumeChapterList.postValue(volumeChapterList)
-            _book.postValue(it)
+            setBook(it)
             requestApiFinished()
         } }
 
@@ -168,6 +171,18 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
         return _currentChapter.value
     }
 
+    fun getBook(): B? {
+        return _book.value
+    }
+
+    private fun setBook(book: B) {
+        _book.postValue(book)
+    }
+
+    private fun setLastSeenTitle(title: String?) {
+        _lastSeenTitle.postValue(title)
+    }
+
     open fun resetViewModel() {
         _book.postValue(null)
         _work.postValue(null)
@@ -178,5 +193,37 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
 
     fun resetViewModelForChapterPage() {
         _currentChapter.postValue(null)
+    }
+
+    fun updateBookLastSeen(baseChapter: BaseChapter) = viewModelScope.launch(IO) {
+        getBook()?.let { book ->
+            val volumeId = baseChapter.volume_id
+            val chapterId = baseChapter.id
+
+            book.last_volume_id = volumeId
+            book.last_chapter_id = chapterId
+            setBook(book)
+
+            // update book to DB
+            bookRepository.updateBookLastSeen(BookUpdateLastSeen(book))
+        }
+    }
+
+    fun getLastSeenTitle(book: B) {
+        _volumeChapterList.value?.let { list ->
+            val chapterTitle = list.find { it is BaseChapter && it.id == book.id }?.run {
+                (this as BaseChapter).name?.getValue()
+            }
+
+            val volumeTitle = list.find { it is Volume && it.id == book.id }?.run {
+                (this as Volume).name?.getValue()
+            }
+
+            if (chapterTitle == null) {
+                setLastSeenTitle(null)
+            } else {
+                setLastSeenTitle("$volumeTitle - $chapterTitle")
+            }
+        }
     }
 }

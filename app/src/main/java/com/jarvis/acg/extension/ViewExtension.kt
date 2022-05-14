@@ -1,11 +1,16 @@
 package com.jarvis.acg.extension
 
 import android.app.Activity
+import android.content.Context
 import android.os.SystemClock
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class ViewExtension {
     companion object {

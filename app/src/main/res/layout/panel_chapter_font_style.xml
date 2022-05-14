@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:background="@color/design_default_color_primary">
+
+        <ImageView
+            android:id="@+id/iv_increase_font_size_scale"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:src="@drawable/icon_increase_font_96dp"
+            app:tint="@color/design_default_color_on_primary" />
+
+        <ImageView
+            android:id="@+id/iv_decrease_font_size_scale"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:src="@drawable/icon_decrease_font_96dp"
+            app:tint="@color/design_default_color_on_primary" />
+
+        <ImageView
+            android:id="@+id/ivIncreaseLineSpace"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:src="@drawable/icon_increase_font_96dp"
+            app:tint="@color/design_default_color_on_primary" />
+
+        <ImageView
+            android:id="@+id/ivDecreaseLineSpace"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:src="@drawable/icon_decrease_font_96dp"
+            app:tint="@color/design_default_color_on_primary" />
+
+
+    </LinearLayout>
+
+</layout>

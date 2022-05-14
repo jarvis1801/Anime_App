@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:key="KEY_DARK_MODE"
+        app:title="@string/setting_dark_mode"
+        />
+
+    <SwitchPreferenceCompat
+        app:key="KEY_API_MODE"
+        app:title="@string/setting_api"
+        />
+
+    <ListPreference
+        app:key="KEY_I18N_LANG"
+        app:title="@string/setting_i18n"
+        />
+
+</PreferenceScreen>

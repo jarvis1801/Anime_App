@@ -22,6 +22,7 @@ import com.jarvis.acg.model.media.Image
 import com.jarvis.acg.repository.resource.ResourceRemoteDataSource
 import com.jarvis.acg.util.CipherUtil
 import com.jarvis.acg.util.DeviceUtil
+import com.jarvis.acg.util.GlideUtil.loadImage
 import com.jarvis.acg.util.ReadingModeUtil
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -58,27 +59,7 @@ class MangaContentAdapter(context: Context, val screenWidth: Int, val screenHeig
         }
 
         private fun loadImage(imageString: String) {
-            val imageDecodeByte = CipherUtil.decode(imageString)
-
-            val glide = Glide.with(context)
-                .asBitmap()
-                .load(imageDecodeByte)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .listener(object : RequestListener<Bitmap> {
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
-                        getViewDataBinding().loading.visibility = View.GONE
-                        return true
-                    }
-
-                    override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        getViewDataBinding().loading.visibility = View.GONE
-                        return false
-                    }
-
-                })
-
-
-            glide.into(binding.imgContent)
+            binding.imgContent.loadImage(imageString)
         }
 
         private fun Image.requestLayoutParam(readingMode: Int) {

@@ -13,4 +13,10 @@ class ResourceRemoteDataSource : BaseDataSource() {
             .getGitHubRetrofitClient().create(ResourceService::class.java)
             .getImage(imagePath)
     }
+
+    suspend fun getWorkThumbnail(imagePath: String) = getResult {
+        RetrofitClient()
+            .getGitHubRetrofitClient().create(ResourceService::class.java)
+            .getWorkThumbnail(imagePath)
+    }
 }

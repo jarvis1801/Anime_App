@@ -10,6 +10,7 @@ import com.jarvis.acg.base.BaseSingleViewHolder
 import com.jarvis.acg.databinding.ItemBookSectionBinding
 import com.jarvis.acg.extension.ViewExtension.Companion.addClick
 import com.jarvis.acg.model.Work
+import com.jarvis.acg.util.GlideUtil.loadImage
 import com.jarvis.acg.util.NavigationUtil.gotoNovelSelectChapterFragment
 
 class BookSectionAdapter(context: Context, val onClick: (item: Work) -> Unit = {}) :
@@ -25,8 +26,16 @@ class BookSectionAdapter(context: Context, val onClick: (item: Work) -> Unit = {
     inner class ViewHolder(binding: ViewDataBinding): BaseSingleViewHolder<Work>(binding) {
         override fun onBind(position: Int, item: Work) {
             super.onBind(position, item)
-            getViewDataBinding().root.apply {
-                addClick({ onClick(item) })
+            getViewDataBinding().apply {
+                root.apply {
+                    addClick({ onClick(item) })
+                }
+
+                imgThumbnail.apply {
+                    item.image_byte_list.takeIf { !it.isNullOrEmpty() }?.get(0)?.let { imageString ->
+                        loadImage(imageString)
+                    }
+                }
             }
         }
     }

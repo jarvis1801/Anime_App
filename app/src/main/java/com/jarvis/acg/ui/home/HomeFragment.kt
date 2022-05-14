@@ -48,6 +48,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel, MainViewMo
             setAdapter(adapter)
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             getChildAt(0).overScrollMode = View.OVER_SCROLL_NEVER
+            offscreenPageLimit = 4
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)

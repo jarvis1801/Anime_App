@@ -89,4 +89,7 @@ dependencies {
 
     // multi type
     implementation 'com.drakeet.multitype:multitype:4.3.0'
+
+    // preference
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 }

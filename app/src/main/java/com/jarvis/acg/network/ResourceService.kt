@@ -10,4 +10,7 @@ interface ResourceService {
 
     @GET("imageResource")
     suspend fun getImage(@Query("path") imagePath: String): Response<String>
+
+    @GET("workThumbnail")
+    suspend fun getWorkThumbnail(@Query("path") imagePath: String): Response<String>
 }

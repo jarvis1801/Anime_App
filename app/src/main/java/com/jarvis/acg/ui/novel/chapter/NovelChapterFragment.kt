@@ -10,6 +10,7 @@ import com.jarvis.acg.extension.ViewExtension.Companion.addClick
 import com.jarvis.acg.extension.ViewExtension.Companion.addGlobalListenerAsOne
 import com.jarvis.acg.util.DeviceUtil.getScreenHeight
 import com.jarvis.acg.util.DeviceUtil.getScreenHeightIncludeStatusBar
+import com.jarvis.acg.util.NavigationUtil.gotoNovelContentSettingFragment
 import com.jarvis.acg.viewModel.MainViewModel
 import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
 
@@ -47,6 +48,10 @@ class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChap
         getDataBinding().imgNextChapter.addClick({
             mViewModel?.onNextChapterClick { getDataBinding().scrollView.scrollTo(0, 0) }
         }, 0)
+
+        getDataBinding().ivSetting.addClick({
+            gotoNovelContentSettingFragment()
+        })
     }
 
     private fun updateProgressBar(scrollY: Int) {
@@ -68,6 +73,8 @@ class NovelChapterFragment : BaseFragment<FragmentNovelChapterBinding, NovelChap
     private fun observeViewModel() {
         mViewModel?.currentChapter?.observe(viewLifecycleOwner) { chapter ->
             chapter?.let {
+                mViewModel?.updateBookLastSeen(chapter)
+
                 mViewModel?.contentLineTopList?.clear()
                 getDataBinding().tvContent.apply {
                     addGlobalListenerAsOne {

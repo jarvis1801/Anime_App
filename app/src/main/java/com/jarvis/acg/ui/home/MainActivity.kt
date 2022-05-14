@@ -1,10 +1,7 @@
 package com.jarvis.acg.ui.home
 
-import android.util.Log
 import android.view.View
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.jarvis.acg.R
 import com.jarvis.acg.base.BaseActivity
 import com.jarvis.acg.databinding.ActivityHomeBinding
@@ -28,14 +25,6 @@ class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
                 hideLoading()
             }
         }
-
-        mViewModel?.novelWorkList?.observe(this) {
-            mViewModel?.requestApiFinished()
-        }
-
-        mViewModel?.mangaWorkList?.observe(this) {
-            mViewModel?.requestApiFinished()
-        }
     }
 
     override fun initView() {
@@ -44,7 +33,6 @@ class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
     override fun initListener() {}
 
     override fun initStartEvent() {
-        mViewModel?.fetchList()
     }
 
     fun showLoading() {
@@ -55,7 +43,7 @@ class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
         getDataBinding().loadingFrame.hideLoading()
     }
 
-    fun isInterceptBack(): Boolean {
+    private fun isInterceptBack(): Boolean {
         return getDataBinding().loadingFrame.visibility == View.VISIBLE
     }
 

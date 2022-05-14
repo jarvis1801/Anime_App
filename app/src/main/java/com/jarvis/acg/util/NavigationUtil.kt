@@ -28,15 +28,17 @@ object NavigationUtil {
         this.findNavController().navigate(action)
     }
 
-    fun Fragment.gotoNovelChapterFragment(chapter: Chapter) {
-        val chapterId = chapter.id
+    fun Fragment.gotoNovelChapterFragment(chapterId: String) {
         val action = NovelSelectChapterFragmentDirections.actionNovelSelectChapterFragmentToNovelChapterFragment(chapterId)
         findNavController().navigate(action)
     }
 
-    fun Fragment.gotoMangaChapterFragment(mangaChapter: MangaChapter) {
-        val chapterId = mangaChapter.id
+    fun Fragment.gotoMangaChapterFragment(chapterId: String) {
         val action = MangaSelectChapterFragmentDirections.actionMangaSelectChapterFragmentToMangaChapterFragment(chapterId)
         findNavController().navigate(action)
+    }
+
+    fun Fragment.gotoNovelContentSettingFragment() {
+        findNavController().navigate(R.id.action_novelChapterFragment_to_novelChapterContentSettingFragment)
     }
 }

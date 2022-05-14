@@ -5,5 +5,8 @@ abstract class BaseACGObject(
     var author_id_list: ArrayList<String>? = null,
     var work_id: String? = null,
     var ended: Boolean? = null,
-    var volume_id_list: ArrayList<String>? = null
+    var volume_id_list: ArrayList<String>? = null,
+
+    var last_volume_id: String? = null,
+    var last_chapter_id: String? = null
 ) : BaseObject()
