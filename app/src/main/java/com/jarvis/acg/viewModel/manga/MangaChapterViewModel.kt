@@ -40,7 +40,8 @@ class MangaChapterViewModel(
     authorRepository,
     volumeRepository,
     chapterRepository,
-    mangaChapterRepository
+    mangaChapterRepository,
+    imageRepository
 ) {
 
     override var _currentChapter: MutableLiveData<MangaChapter?> = MutableLiveData()

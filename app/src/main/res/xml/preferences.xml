@@ -9,6 +9,7 @@
     <SwitchPreferenceCompat
         app:key="KEY_API_MODE"
         app:title="@string/setting_api"
+        app:defaultValue="true"
         />
 
     <ListPreference

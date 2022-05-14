@@ -10,6 +10,7 @@ import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.mangaChapter.MangaChapter
 import com.jarvis.acg.ui.manga.select.MangaSelectChapterFragment
 import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragment
+import com.jarvis.acg.util.GlideUtil.loadImage
 import com.jarvis.acg.util.NavigationUtil.gotoMangaChapterFragment
 import com.jarvis.acg.util.NavigationUtil.gotoNovelChapterFragment
 import com.jarvis.acg.viewModel.MainViewModel
@@ -73,6 +74,7 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
         mViewModel?.work?.observe(viewLifecycleOwner) { work ->
             work?.let {
                 updateTitle(work)
+                updateThumbnail(work)
             }
         }
 
@@ -107,6 +109,12 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
                     })
                 }
             }
+        }
+    }
+
+    private fun updateThumbnail(work: Work) {
+        work.image_byte_list?.takeIf { !it.isNullOrEmpty() }?.get(0)?.let { imageString ->
+            getDataBinding().imgThumbnail.loadImage(imageString)
         }
     }
 

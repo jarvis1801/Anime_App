@@ -10,9 +10,12 @@ import com.jarvis.acg.extension.Extension.Companion.toArrayList
 import com.jarvis.acg.model.*
 import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.mangaChapter.MangaChapter
+import com.jarvis.acg.model.media.ImageUpdateImageString
+import com.jarvis.acg.repository.Status
 import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.book.BookRepository
 import com.jarvis.acg.repository.chapter.ChapterRepository
+import com.jarvis.acg.repository.image.ImageRepository
 import com.jarvis.acg.repository.mangaChapter.MangaChapterRepository
 import com.jarvis.acg.repository.resource.ResourceRemoteDataSource
 import com.jarvis.acg.repository.volume.VolumeRepository
@@ -36,6 +39,7 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
     private val volumeRepository: VolumeRepository,
     private val chapterRepository: ChapterRepository,
     private val mangaChapterRepository: MangaChapterRepository,
+    private val imageRepository: ImageRepository
 ) : BaseViewModel() {
 
     private val _book = MutableLiveData<B?>()
@@ -74,11 +78,38 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
             requestApiFinished()
         } }
 
-        val work = workRepository.getWorkByIdFromDB(book?.work_id)
+        val work = withContext(IO) { getWork(book) }
         launch { work?.let { _work.postValue(it) } }
 
         val authorList = authorRepository.getAuthorListByIdListFromDB(book?.author_id_list ?: arrayListOf())
         launch { authorList?.let { _authorList.postValue(it) } }
+    }
+
+    private suspend fun getWork(book: B?): Work? = withContext(IO) {
+        val work = workRepository.getWorkByIdFromDB(book?.work_id)
+        work?.thumbnail_id_list?.let { imagePrefetchIdList ->
+            val imagePrefetchList = async(IO) { imageRepository.getListByIdListFromDB(imagePrefetchIdList) }.await()
+
+            val imageStringList = imagePrefetchList?.map { image ->
+                async { image.url?.let { url ->
+                    if (image.imageString.isNullOrEmpty()) {
+                        val request = ResourceRemoteDataSource().getWorkThumbnail(url)
+                        val data = request.takeIf { request.status == Status.SUCCESS }?.data
+                        data?.let {
+                            image.imageString = it
+                            imageRepository.updateImageString(ImageUpdateImageString(image))
+                        }
+                        data
+                    } else {
+                        image.imageString
+                    }
+                } }
+            }?.mapNotNull {
+                it.await()
+            }
+            work.image_byte_list = imageStringList?.toCollection(ArrayList())
+        }
+        return@withContext work
     }
 
     private suspend fun fetchVolumeChapterList(novel: Book): ArrayList<Any> {

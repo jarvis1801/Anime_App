@@ -4,11 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.jarvis.acg.App
 import com.jarvis.acg.model.Novel
 import com.jarvis.acg.model.chapter.Chapter
 import com.jarvis.acg.model.chapter.ChapterUpdate
 import com.jarvis.acg.repository.author.AuthorRepository
 import com.jarvis.acg.repository.chapter.ChapterRepository
+import com.jarvis.acg.repository.image.ImageRemoteDataSource
+import com.jarvis.acg.repository.image.ImageRepository
 import com.jarvis.acg.repository.mangaChapter.MangaChapterRepository
 import com.jarvis.acg.repository.novel.NovelRepository
 import com.jarvis.acg.repository.volume.VolumeRepository
@@ -24,7 +27,8 @@ class NovelChapterViewModel(
     authorRepository: AuthorRepository,
     volumeRepository: VolumeRepository,
     val chapterRepository: ChapterRepository,
-    mangaChapterRepository: MangaChapterRepository
+    mangaChapterRepository: MangaChapterRepository,
+    imageRepository: ImageRepository
 ) : BookChapterViewModel<Novel, Chapter>(
     savedStateHandle,
     novelRepository,
@@ -32,7 +36,8 @@ class NovelChapterViewModel(
     authorRepository,
     volumeRepository,
     chapterRepository,
-    mangaChapterRepository
+    mangaChapterRepository,
+    imageRepository
 ) {
     override var _currentChapter: MutableLiveData<Chapter?> = MutableLiveData()
     val currentChapter = _currentChapter as LiveData<Chapter?>
