@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ACG_App</string>
+    <string name="anime">動畫</string>
+    <string name="manga">漫畫</string>
+    <string name="novel">小說</string>
+    <string name="setting">設定</string>
+    <string name="setting_dark_mode">深暗模式</string>
+    <string name="setting_api">啟動API</string>
+    <string name="setting_i18n">語言</string>
+</resources>

@@ -1,6 +1,5 @@
 package com.jarvis.acg.viewModel.book
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -22,12 +21,14 @@ import com.jarvis.acg.repository.volume.VolumeRepository
 import com.jarvis.acg.repository.work.WorkRepository
 import com.jarvis.acg.util.DateTimeUtil
 import com.jarvis.acg.util.DateTimeUtil.convertDateToTimestamp
+import com.jarvis.acg.util.FileUtil
+import com.jarvis.acg.util.FileUtil.getAndroidFolderStructure
+import com.jarvis.acg.util.FileUtil.isFileExist
+import com.jarvis.acg.util.FileUtil.readFileString
 import com.jarvis.acg.viewModel.manga.MangaChapterViewModel
 import com.jarvis.acg.viewModel.novel.NovelChapterViewModel
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -90,24 +91,29 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
         work?.thumbnail_id_list?.let { imagePrefetchIdList ->
             val imagePrefetchList = async(IO) { imageRepository.getListByIdListFromDB(imagePrefetchIdList) }.await()
 
-            val imageStringList = imagePrefetchList?.map { image ->
+            val imageStringList = imagePrefetchList.map { image ->
                 async { image.url?.let { url ->
                     if (image.imageString.isNullOrEmpty()) {
-                        val request = ResourceRemoteDataSource().getWorkThumbnail(url)
-                        val data = request.takeIf { request.status == Status.SUCCESS }?.data
-                        data?.let {
-                            image.imageString = it
-                            imageRepository.updateImageString(ImageUpdateImageString(image))
+                        val filePullPath = "${FileUtil.PATH_APP_SPECIFIC_FOLDER}${url.getAndroidFolderStructure()}"
+                        if (filePullPath.isFileExist()) {
+                            filePullPath.readFileString()
+                        } else {
+                            val request = ResourceRemoteDataSource().getWorkThumbnail(url)
+                            val data = request.takeIf { request.status == Status.SUCCESS }?.data
+                            data?.let {
+                                image.imageString = it
+                                imageRepository.updateImageString(ImageUpdateImageString(image))
+                            }
+                            data
                         }
-                        data
                     } else {
                         image.imageString
                     }
                 } }
-            }?.mapNotNull {
+            }.mapNotNull {
                 it.await()
             }
-            work.image_byte_list = imageStringList?.toCollection(ArrayList())
+            work.image_byte_list = imageStringList.toCollection(ArrayList())
         }
         return@withContext work
     }
@@ -178,8 +184,13 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
         chapter.imageList?.mapIndexed { index, item -> item.url }?.mapIndexed { index, url ->
             async(IO) {
                 if (url != null) {
-                    val imageRequest = ResourceRemoteDataSource().getImageResource(url)
-                    chapter.imageList!![index].imageString = imageRequest.data
+                    val filePullPath = "${FileUtil.PATH_APP_SPECIFIC_FOLDER}${url.getAndroidFolderStructure()}"
+                    if (filePullPath.isFileExist()) {
+                        chapter.imageList!![index].imageString = filePullPath.readFileString()
+                    } else {
+                        val imageRequest = ResourceRemoteDataSource().getImageResource(url)
+                        chapter.imageList!![index].imageString = imageRequest.data
+                    }
 
                     if (notifyList.contains(index))
                         _notifyIndexChanged.postValue(index)
@@ -242,18 +253,18 @@ abstract class BookChapterViewModel<B : Book, C: BaseChapter>(
 
     fun getLastSeenTitle(book: B) {
         _volumeChapterList.value?.let { list ->
-            val chapterTitle = list.find { it is BaseChapter && it.id == book.id }?.run {
-                (this as BaseChapter).name?.getValue()
+            val chapterTitle = list.find { it is BaseChapter && it.id == book.last_chapter_id }?.run {
+                (this as BaseChapter).sectionName?.getValue()
             }
 
-            val volumeTitle = list.find { it is Volume && it.id == book.id }?.run {
+            val volumeTitle = list.find { it is Volume && it.id == book.last_volume_id }?.run {
                 (this as Volume).name?.getValue()
             }
 
             if (chapterTitle == null) {
                 setLastSeenTitle(null)
             } else {
-                setLastSeenTitle("$volumeTitle - $chapterTitle")
+                setLastSeenTitle("$volumeTitle - $chapterTitle".replace("null", ""))
             }
         }
     }

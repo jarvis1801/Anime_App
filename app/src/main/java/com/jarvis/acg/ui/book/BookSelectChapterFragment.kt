@@ -1,12 +1,16 @@
 package com.jarvis.acg.ui.book
 
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jarvis.acg.R
 import com.jarvis.acg.base.BaseFragment
 import com.jarvis.acg.databinding.FragmentBookSelectChapterBinding
+import com.jarvis.acg.extension.Extension.Companion.toArrayList
 import com.jarvis.acg.extension.ViewExtension.Companion.addClick
-import com.jarvis.acg.model.*
-import com.jarvis.acg.model.chapter.Chapter
+import com.jarvis.acg.model.Author
+import com.jarvis.acg.model.BaseChapter
+import com.jarvis.acg.model.Book
+import com.jarvis.acg.model.Work
 import com.jarvis.acg.model.mangaChapter.MangaChapter
 import com.jarvis.acg.ui.manga.select.MangaSelectChapterFragment
 import com.jarvis.acg.ui.novel.select.NovelSelectChapterFragment
@@ -34,6 +38,24 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
 
     override fun initView() {
         initRecyclerView()
+        initDownload()
+    }
+
+    private fun initDownload() {
+        if (this is MangaSelectChapterFragment) {
+            getDataBinding().ivDownload.apply {
+                visibility = View.VISIBLE
+                addClick({
+                    val volumeChapterList = mViewModel?.getVolumeChapterList() ?: arrayListOf()
+                    val prefetchImageIdList = volumeChapterList.filterIsInstance<MangaChapter>().flatMap {
+                        it.imageList ?: arrayListOf()
+                    }.map { it.id }.toArrayList()
+                    if (prefetchImageIdList.isNotEmpty()) {
+                        mActivityViewModel?.setPrefetchImageIdList(prefetchImageIdList)
+                    }
+                })
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -95,6 +117,7 @@ abstract class BookSelectChapterFragment<B: Book, C: BaseChapter, VM: BookChapte
             title.let {
                 getDataBinding().btnChapterNavigate.apply {
                     text = if (title != null) { "繼續 $title" } else { "開始" }
+                    visibility = View.VISIBLE
                     addClick({
                         if (title != null) {
                             mViewModel?.getBook()?.last_chapter_id?.let {

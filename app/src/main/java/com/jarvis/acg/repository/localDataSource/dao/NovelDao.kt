@@ -2,6 +2,7 @@ package com.jarvis.acg.repository.localDataSource.dao
 
 import androidx.room.*
 import com.jarvis.acg.model.BookUpdateLastSeen
+import com.jarvis.acg.model.BookUpdateOrigin
 import com.jarvis.acg.model.Manga
 import com.jarvis.acg.model.Novel
 
@@ -22,6 +23,12 @@ interface NovelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(obj: Novel)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertIgnore(obj: Novel)
+
     @Update(entity = Novel::class)
     fun updateLastSeen(obj: BookUpdateLastSeen): Int
+
+    @Update(entity = Novel::class)
+    fun update(obj: BookUpdateOrigin): Int
 }

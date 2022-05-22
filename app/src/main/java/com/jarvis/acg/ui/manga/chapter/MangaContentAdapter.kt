@@ -91,7 +91,10 @@ class MangaContentAdapter(context: Context, val screenWidth: Int, val screenHeig
 
         private fun updateLayoutParam(widthSpec: Int, heightSpec: Int) {
             val layoutParams = FrameLayout.LayoutParams(widthSpec, heightSpec)
+            binding.container.layoutParams = layoutParams
             binding.imgContent.layoutParams = layoutParams
+
+            binding.container.requestLayout()
             binding.imgContent.requestLayout()
         }
     }

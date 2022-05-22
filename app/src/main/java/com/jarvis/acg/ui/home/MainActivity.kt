@@ -1,10 +1,13 @@
 package com.jarvis.acg.ui.home
 
+import android.content.Intent
 import android.view.View
 import androidx.navigation.findNavController
 import com.jarvis.acg.R
 import com.jarvis.acg.base.BaseActivity
 import com.jarvis.acg.databinding.ActivityHomeBinding
+import com.jarvis.acg.service.MangaChapterDownloadService
+import com.jarvis.acg.service.MangaChapterDownloadService.Companion.KEY_IMAGE_ID_LIST
 import com.jarvis.acg.viewModel.MainViewModel
 
 class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
@@ -25,6 +28,18 @@ class MainActivity : BaseActivity<ActivityHomeBinding, MainViewModel>() {
                 hideLoading()
             }
         }
+
+        mViewModel?.prefetchImageIdList?.observe(this) { list ->
+            takeIf { !list.isNullOrEmpty() }?.let {
+                startDownloadService(list)
+            }
+        }
+    }
+
+    private fun startDownloadService(list: ArrayList<String>) {
+        startService(Intent(this, MangaChapterDownloadService::class.java).apply {
+            putExtra(KEY_IMAGE_ID_LIST, list)
+        })
     }
 
     override fun initView() {
