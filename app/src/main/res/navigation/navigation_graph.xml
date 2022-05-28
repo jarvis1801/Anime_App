@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.jarvis.acg.ui.splash.SplashFragment"
+        android:name="com.jarvis.anime.ui.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash">
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.jarvis.acg.ui.home.HomeFragment"
+        android:name="com.jarvis.anime.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -54,7 +54,7 @@
 
     <fragment
         android:id="@+id/novelSelectChapterFragment"
-        android:name="com.jarvis.acg.ui.novel.select.NovelSelectChapterFragment"
+        android:name="com.jarvis.anime.ui.novel.select.NovelSelectChapterFragment"
         android:label="NovelSelectChapterFragment"
         tools:layout="@layout/fragment_book_select_chapter" >
 
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/novelChapterFragment"
-        android:name="com.jarvis.acg.ui.novel.chapter.NovelChapterFragment"
+        android:name="com.jarvis.anime.ui.novel.chapter.NovelChapterFragment"
         android:label="NovelChapterFragment"
         tools:layout="@layout/fragment_novel_chapter">
 
@@ -106,7 +106,7 @@
     </fragment>
     <fragment
         android:id="@+id/mangaSelectChapterFragment"
-        android:name="com.jarvis.acg.ui.manga.select.MangaSelectChapterFragment"
+        android:name="com.jarvis.anime.ui.manga.select.MangaSelectChapterFragment"
         android:label="MangaSelectChapterFragment"
         tools:layout="@layout/fragment_book_select_chapter">
 
@@ -133,7 +133,7 @@
     </fragment>
     <fragment
         android:id="@+id/mangaChapterFragment"
-        android:name="com.jarvis.acg.ui.manga.chapter.MangaChapterFragment"
+        android:name="com.jarvis.anime.ui.manga.chapter.MangaChapterFragment"
         android:label="MangaChapterFragment"
         tools:layout="@layout/fragment_manga_chapter">
 
@@ -146,7 +146,7 @@
 
     <fragment
         android:id="@+id/novelChapterContentSettingFragment"
-        android:name="com.jarvis.acg.ui.novel.chapter.NovelChapterContentSettingFragment"
+        android:name="com.jarvis.anime.ui.novel.chapter.NovelChapterContentSettingFragment"
         android:label="NovelChapterContentSettingFragment"
         tools:layout="@layout/fragment_novel_content_setting"/>
 </navigation>

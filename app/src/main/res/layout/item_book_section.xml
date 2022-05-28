@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="item" type="com.jarvis.acg.model.Work" />
+        <variable name="item" type="com.jarvis.anime.model.Work" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
         </androidx.cardview.widget.CardView>
 
 
-        <com.jarvis.acg.ui.customView.CustomTextView
+        <com.jarvis.anime.ui.customView.CustomTextView
             android:id="@+id/txt_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

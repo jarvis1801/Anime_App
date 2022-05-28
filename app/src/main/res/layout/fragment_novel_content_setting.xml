@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.jarvis.acg.ui.novel.chapter.NovelChapterContentSettingFragment">
+    tools:context="com.jarvis.anime.ui.novel.chapter.NovelChapterContentSettingFragment">
 
     <data>
 
@@ -19,7 +19,7 @@
             android:paddingVertical="27dp"
             android:orientation="vertical">
 
-            <com.jarvis.acg.ui.customView.CustomTextView
+            <com.jarvis.anime.ui.customView.CustomTextView
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:ellipsize="marquee"
                 app:isChapterContent="true" />
 
-            <com.jarvis.acg.ui.customView.CustomTextView
+            <com.jarvis.anime.ui.customView.CustomTextView
                 android:id="@+id/tvContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
 
         </LinearLayout>
 
-        <com.jarvis.acg.ui.customView.ChapterFontStylePanel
+        <com.jarvis.anime.ui.customView.ChapterFontStylePanel
             android:id="@+id/fontPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

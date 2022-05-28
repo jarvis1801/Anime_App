@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jarvis.acg">
+    package="com.jarvis.anime">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,12 +10,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ACG_App"
-        android:name=".App"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/Theme.Anime_App"
+        android:name="com.jarvis.anime.App"
+        android:usesCleartextTraffic="true"
+        android:largeHeap="true">
 
         <activity
-            android:name=".ui.home.MainActivity"
+            android:name="com.jarvis.anime.ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.jarvis.anime.service.MangaChapterDownloadService"
+            android:label="MangaChapterDownloadService" />
 
     </application>
 

@@ -23,7 +23,7 @@
             tools:text="0/0"
             />
 
-        <com.jarvis.acg.ui.customView.CustomSlider
+        <com.jarvis.anime.ui.customView.CustomSlider
             android:id="@+id/progressbar_page"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

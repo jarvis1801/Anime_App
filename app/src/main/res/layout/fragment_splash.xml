@@ -6,11 +6,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jarvis.acg.ui.splash.SplashViewModel" />
+            type="com.jarvis.anime.ui.splash.SplashViewModel" />
 
         <variable
             name="activityViewModel"
-            type="com.jarvis.acg.viewModel.MainViewModel" />
+            type="com.jarvis.anime.viewModel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

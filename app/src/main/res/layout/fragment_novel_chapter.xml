@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jarvis.acg.viewModel.novel.NovelChapterViewModel" />
+            type="com.jarvis.anime.viewModel.novel.NovelChapterViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                     android:paddingVertical="27dp"
                     android:scrollbars="none">
 
-                    <com.jarvis.acg.ui.customView.CustomTextView
+                    <com.jarvis.anime.ui.customView.CustomTextView
                         android:id="@+id/tvTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@string/dummy_title" />
 
-                    <com.jarvis.acg.ui.customView.CustomTextView
+                    <com.jarvis.anime.ui.customView.CustomTextView
                         android:id="@+id/tvContent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                         android:orientation="vertical"
                         app:layout_constraintGuide_percent="0.5" />
 
-                    <com.jarvis.acg.ui.customView.CustomMaterialButton
+                    <com.jarvis.anime.ui.customView.CustomMaterialButton
                         android:id="@+id/imgPrevChapter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                         style="@style/Widget.Material3.Button.Icon"
                         />
 
-                    <com.jarvis.acg.ui.customView.CustomMaterialButton
+                    <com.jarvis.anime.ui.customView.CustomMaterialButton
                         android:id="@+id/imgNextChapter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -5,18 +5,18 @@
 
     <data>
 
-        <import type="com.jarvis.acg.model.Translation" />
+        <import type="com.jarvis.anime.model.Translation" />
 
         <variable
             name="volume"
-            type="com.jarvis.acg.model.Volume" />
+            type="com.jarvis.anime.model.Volume" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.jarvis.acg.ui.customView.CustomTextView
+        <com.jarvis.anime.ui.customView.CustomTextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

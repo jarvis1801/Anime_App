@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jarvis.acg.viewModel.MainViewModel" />
+            type="com.jarvis.anime.viewModel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +26,7 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/navigation_graph" />
 
-        <com.jarvis.acg.ui.customView.LoadingFrame
+        <com.jarvis.anime.ui.customView.LoadingFrame
             android:id="@+id/loadingFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

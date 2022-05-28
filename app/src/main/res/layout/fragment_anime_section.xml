@@ -6,7 +6,7 @@
     <data>
         <variable
             name="activityViewModel"
-            type="com.jarvis.acg.viewModel.MainViewModel" />
+            type="com.jarvis.anime.viewModel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

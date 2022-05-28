@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.jarvis.acg.viewModel.search.SearchViewModel" />
+            type="com.jarvis.anime.viewModel.search.SearchViewModel" />
 
     </data>
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.jarvis.acg.ui.customView.CustomSearchBar
+        <com.jarvis.anime.ui.customView.CustomSearchBar
             android:id="@+id/search_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

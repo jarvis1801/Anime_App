@@ -4,7 +4,7 @@
     tools:context=".ui.home.section.AnimeSectionFragment">
 
     <data>
-        <import type="com.jarvis.acg.model.Translation" />
+        <import type="com.jarvis.anime.model.Translation" />
 
         <variable
             name="title"
